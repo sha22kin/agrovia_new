@@ -1,0 +1,2028 @@
+/* ==========================================================================
+   Frest eCommerce Admin Template - Seller Dashboard Theme
+   Pixel-perfect design system based on Frest HTML Laravel Admin Template
+   ========================================================================== */
+
+:root {
+  /* Brand Green Color Palette (from Official Platform Logo) */
+  --frest-primary: #139547;
+  --frest-primary-hover: #107f3c;
+  --frest-primary-active: #0a5427;
+  --frest-primary-rgb: 19, 149, 71;
+  --frest-primary-light: rgba(19, 149, 71, 0.12);
+  
+  --frest-secondary: #69809a;
+  --frest-secondary-rgb: 105, 128, 154;
+  --frest-secondary-light: rgba(105, 128, 154, 0.12);
+
+  --frest-success: #39da8a;
+  --frest-success-hover: #2ec278;
+  --frest-success-rgb: 57, 218, 138;
+  --frest-success-light: rgba(57, 218, 138, 0.12);
+
+  --frest-danger: #ff5b5c;
+  --frest-danger-hover: #e54b4c;
+  --frest-danger-rgb: 255, 91, 92;
+  --frest-danger-light: rgba(255, 91, 92, 0.12);
+
+  --frest-warning: #fdac41;
+  --frest-warning-hover: #e59730;
+  --frest-warning-rgb: 253, 172, 65;
+  --frest-warning-light: rgba(253, 172, 65, 0.12);
+
+  --frest-info: #00cfdd;
+  --frest-info-hover: #00b6c2;
+  --frest-info-rgb: 0, 207, 221;
+  --frest-info-light: rgba(0, 207, 221, 0.12);
+
+  --frest-dark: #475f7b;
+  --frest-dark-rgb: 71, 95, 123;
+  --frest-body: #566a7f;
+  --frest-muted: #8295ad;
+  --frest-light: #f4f5fa;
+  --frest-card-bg: #ffffff;
+  --frest-border: #e6e8eb;
+  --frest-border-light: #f0f2f4;
+
+  /* Shadows */
+  --frest-box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.08);
+  --frest-box-shadow-hover: 0 4px 16px 0 rgba(67, 89, 113, 0.14);
+  --frest-primary-shadow: 0 2px 8px 0 rgba(19, 149, 71, 0.35);
+
+  /* Overwrite legacy variables for complete backward compatibility */
+  --c-text: #475f7b;
+  --c-text-2: #566a7f;
+  --c-muted: #8295ad;
+  --c-border: #e6e8eb;
+  --c-border-2: #d9dee3;
+  --c-bg: #f4f5fa;
+  --c-hover: #f3f5f8;
+  --av-ink: #475f7b;
+  --av-muted: #8295ad;
+  --av-border: #e6e8eb;
+  --av-green-700: #107f3c;
+  --av-green-800: #0a5427;
+  --av-green-600: #139547;
+  --av-green-500: #18a852;
+  --av-green-100: rgba(19, 149, 71, 0.12);
+  --av-green-50: #f3faf5;
+}
+
+/* ==========================================================================
+   Base & Typography
+   ========================================================================== */
+body.av-dashboard {
+  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.53;
+  color: var(--frest-body);
+  background-color: var(--frest-light);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: 'Rubik', 'IBM Plex Sans', sans-serif;
+  color: var(--frest-dark);
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+a {
+  color: var(--frest-primary);
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+}
+
+a:hover {
+  color: var(--frest-primary-hover);
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   Layout Wrapper
+   ========================================================================== */
+.av-shell {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--frest-light);
+}
+
+.av-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--frest-light);
+}
+
+.av-main {
+  flex: 1;
+  padding: 1.5rem;
+  background-color: var(--frest-light);
+}
+
+/* ==========================================================================
+   Frest Sidebar
+   ========================================================================== */
+.av-side {
+  flex: 0 0 260px;
+  width: 260px;
+  max-width: 260px;
+  min-width: 78px;
+  margin-left: 0;
+  background: var(--frest-card-bg);
+  border-right: 1px solid var(--frest-border);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 1040;
+  box-shadow: 0 0.125rem 0.375rem 0 rgba(161, 172, 184, 0.12);
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              flex 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-x: hidden;
+  will-change: width, flex;
+}
+
+/* Sidebar Collapsed / Mini Icon-Only Mode on Desktop */
+.av-shell.sidebar-collapsed .av-side {
+  flex: 0 0 78px !important;
+  width: 78px !important;
+  max-width: 78px !important;
+  min-width: 78px !important;
+  margin-left: 0 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  overflow-x: hidden !important;
+}
+
+.av-shell.sidebar-collapsed .frest-brand {
+  width: 78px !important;
+  min-width: 78px !important;
+  max-width: 78px !important;
+  padding: 0 0.5rem !important;
+  justify-content: center !important;
+}
+
+.av-shell.sidebar-collapsed .frest-brand-link {
+  justify-content: center !important;
+  max-width: 100% !important;
+}
+
+.av-shell.sidebar-collapsed .frest-brand-img {
+  display: none !important;
+}
+
+.av-shell.sidebar-collapsed .frest-brand-mini-icon {
+  display: block !important;
+  width: 32px !important;
+  height: 32px !important;
+  object-fit: contain !important;
+  margin: 0 auto !important;
+}
+
+.av-shell.sidebar-collapsed .frest-brand-badge {
+  display: none !important;
+}
+
+.av-shell.sidebar-collapsed #sidebarBrandToggle,
+.av-shell.sidebar-collapsed .frest-sidebar-toggle {
+  display: none !important;
+}
+
+.av-shell.sidebar-collapsed .av-sidebar {
+  padding: 0.75rem 0.5rem 1.5rem !important;
+  overflow-x: hidden !important;
+}
+
+.av-shell.sidebar-collapsed .menu-header {
+  font-size: 0 !important;
+  line-height: 0 !important;
+  padding: 0 !important;
+  margin: 0.75rem auto !important;
+  width: 24px !important;
+  height: 1px !important;
+  min-height: 1px !important;
+  max-height: 1px !important;
+  background-color: var(--frest-border) !important;
+  display: block !important;
+  text-indent: -9999px !important;
+  overflow: hidden !important;
+  border: none !important;
+}
+
+.av-shell.sidebar-collapsed .menu-header::before {
+  display: none !important;
+}
+
+.av-shell.sidebar-collapsed .av-nav-link {
+  width: 46px !important;
+  height: 44px !important;
+  padding: 0 !important;
+  margin: 0 auto 0.4rem auto !important;
+  justify-content: center !important;
+  align-items: center !important;
+  display: flex !important;
+  position: relative !important;
+  border-radius: 0.5rem !important;
+  text-align: center !important;
+}
+
+.av-shell.sidebar-collapsed .av-nav-link i,
+.av-shell.sidebar-collapsed .av-nav-link .material-icons {
+  font-size: 1.35rem !important;
+  width: auto !important;
+  margin: 0 !important;
+  flex-shrink: 0 !important;
+}
+
+.av-shell.sidebar-collapsed .av-nav-link .label {
+  display: none !important;
+}
+
+.av-shell.sidebar-collapsed .av-nav-link .arrow,
+.av-shell.sidebar-collapsed .av-nav-link .expand {
+  display: none !important;
+}
+
+.av-shell.sidebar-collapsed .av-nav-link .pill {
+  position: absolute !important;
+  top: 6px !important;
+  right: 6px !important;
+  min-width: 8px !important;
+  width: 8px !important;
+  height: 8px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  font-size: 0 !important;
+  background-color: var(--frest-danger, #ff5b5c) !important;
+  border: 2px solid var(--frest-card-bg, #ffffff) !important;
+  line-height: 0 !important;
+}
+
+.av-shell.sidebar-collapsed .av-nav-link:hover {
+  background-color: var(--frest-primary-light) !important;
+  color: var(--frest-primary) !important;
+  transform: translateY(-1px) !important;
+}
+
+.av-shell.sidebar-collapsed .av-nav-link.active {
+  background-color: var(--frest-primary) !important;
+  color: #ffffff !important;
+  box-shadow: var(--frest-primary-shadow) !important;
+}
+
+.av-shell.sidebar-collapsed .av-nav-link.active i {
+  color: #ffffff !important;
+}
+
+.av-shell.sidebar-collapsed .av-promo {
+  display: none !important;
+}
+
+.av-shell.sidebar-collapsed .av-user-card {
+  display: none !important;
+}
+
+.frest-sidebar-toggle {
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--frest-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.25rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.frest-sidebar-toggle:hover {
+  background-color: var(--frest-primary-light);
+  color: var(--frest-primary);
+  border-color: rgba(19, 149, 71, 0.2);
+}
+
+.av-sidebar-toggle {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.av-sidebar-toggle:hover {
+  background-color: var(--frest-primary-light);
+  color: var(--frest-primary);
+}
+
+.av-shell.sidebar-collapsed .av-sidebar-toggle {
+  background-color: var(--frest-primary-light);
+  color: var(--frest-primary);
+  border-color: rgba(19, 149, 71, 0.3);
+}
+
+.frest-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.85rem 1.25rem;
+  height: 64px;
+  min-height: 64px;
+  border-bottom: 1px solid var(--frest-border-light);
+  box-sizing: border-box;
+  overflow: hidden;
+  width: 260px;
+  min-width: 260px;
+}
+
+.frest-brand-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 160px;
+}
+
+.frest-brand-img {
+  max-height: 36px;
+  max-width: 150px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.frest-brand-mini-icon {
+  display: none;
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.frest-brand-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.frest-brand-logo svg {
+  width: 26px;
+  height: 26px;
+}
+
+.frest-brand-text {
+  font-family: 'Rubik', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--frest-dark);
+  letter-spacing: -0.5px;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.frest-brand-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.18rem 0.45rem;
+  border-radius: 4px;
+  background-color: var(--frest-primary-light);
+  color: var(--frest-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.av-sidebar {
+  flex: 1;
+  padding: 0.75rem 0.85rem 1.5rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.av-sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.av-sidebar::-webkit-scrollbar-thumb {
+  background-color: rgba(67, 89, 113, 0.15);
+  border-radius: 4px;
+}
+
+/* Sidebar Menu Header Labels */
+.menu-header {
+  padding: 1.1rem 0.75rem 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--frest-muted);
+}
+
+.menu-header::before {
+  content: "";
+  display: inline-block;
+  width: 1rem;
+  height: 1px;
+  background-color: var(--frest-border);
+  vertical-align: middle;
+  margin-right: 0.5rem;
+}
+
+/* Sidebar Nav Links */
+.av-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  margin-bottom: 0.25rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--frest-body);
+  transition: all 0.2s ease-in-out;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+}
+
+.av-nav-link i,
+.av-nav-link .material-icons {
+  font-size: 1.25rem;
+  width: 1.25rem;
+  color: var(--frest-muted);
+  transition: color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.av-nav-link .label {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.av-nav-link .arrow {
+  font-size: 1rem;
+  color: var(--frest-muted);
+  transition: transform 0.2s ease;
+}
+
+.av-nav-link .expand {
+  font-size: 1.15rem;
+  color: var(--frest-muted);
+  transition: transform 0.2s ease;
+}
+
+.av-nav-link[aria-expanded="true"] .expand {
+  transform: rotate(180deg);
+}
+
+
+.av-nav-link:hover {
+  background-color: rgba(67, 89, 113, 0.04);
+  color: var(--frest-dark);
+}
+
+.av-nav-link:hover i,
+.av-nav-link:hover .material-icons {
+  color: var(--frest-primary);
+}
+
+.av-nav-link.active {
+  background-color: var(--frest-primary);
+  color: #ffffff;
+  box-shadow: var(--frest-primary-shadow);
+  font-weight: 600;
+}
+
+.av-nav-link.active i,
+.av-nav-link.active .material-icons,
+.av-nav-link.active .arrow {
+  color: #ffffff;
+}
+
+.av-nav-link .pill {
+  padding: 0.18rem 0.45rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 10rem;
+  background-color: var(--frest-danger);
+  color: #ffffff;
+  line-height: 1;
+}
+
+.av-nav-link.active .pill {
+  background-color: #ffffff;
+  color: var(--frest-primary);
+}
+
+.av-nav-btn {
+  cursor: pointer;
+}
+
+/* Submenu block */
+.av-sub-block {
+  margin: 0.25rem 0 0.5rem 1.25rem;
+  padding-left: 0.75rem;
+  border-left: 1px solid var(--frest-border);
+}
+
+.av-sub-link {
+  display: block;
+  padding: 0.45rem 0.75rem;
+  margin-bottom: 0.15rem;
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
+  color: var(--frest-body);
+  transition: all 0.2s ease;
+}
+
+.av-sub-link:hover {
+  background-color: rgba(67, 89, 113, 0.04);
+  color: var(--frest-dark);
+}
+
+.av-sub-link.active {
+  color: var(--frest-primary);
+  font-weight: 600;
+  background-color: var(--frest-primary-light);
+}
+
+/* User Card in Sidebar */
+.av-user-card-wrap {
+  margin: 0.25rem 0 0.85rem;
+}
+
+.av-user-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  background-color: var(--frest-light);
+  border: 1px solid var(--frest-border);
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.av-user-card:hover {
+  background-color: #ffffff;
+  border-color: var(--frest-primary);
+  box-shadow: var(--frest-box-shadow);
+}
+
+.av-user-card img {
+  width: 38px;
+  height: 38px;
+  border-radius: 0.375rem;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.av-user-card .info {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.av-user-card .name {
+  display: block;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--frest-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.av-user-card .mail {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--frest-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.av-user-card .caret {
+  font-size: 1.1rem;
+  color: var(--frest-muted);
+}
+
+/* Promo Card in Sidebar */
+.av-promo {
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, rgba(19, 149, 71, 0.08) 0%, rgba(19, 149, 71, 0.02) 100%);
+  border: 1px solid rgba(19, 149, 71, 0.2);
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.av-promo h6 {
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--frest-dark);
+  margin-bottom: 0.35rem;
+}
+
+.av-promo p {
+  font-size: 0.75rem;
+  color: var(--frest-muted);
+  margin-bottom: 0.75rem;
+}
+
+.av-promo .btn-post {
+  display: inline-block;
+  width: 100%;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  background-color: var(--frest-primary);
+  color: #ffffff;
+  border-radius: 0.375rem;
+  box-shadow: var(--frest-primary-shadow);
+  transition: all 0.2s ease;
+}
+
+.av-promo .btn-post:hover {
+  background-color: var(--frest-primary-hover);
+  color: #ffffff;
+}
+
+/* Offcanvas Sidebar */
+.av-offcanvas {
+  width: 260px !important;
+  background-color: #ffffff;
+}
+
+.av-offcanvas .offcanvas-header {
+  padding: 0 1rem;
+  height: 64px;
+  min-height: 64px;
+  border-bottom: 1px solid var(--frest-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  box-sizing: border-box;
+}
+
+.av-offcanvas .frest-brand-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  flex-shrink: 1;
+  min-width: 0;
+  max-width: 125px;
+}
+
+.av-offcanvas .frest-brand-img {
+  max-height: 32px;
+  max-width: 120px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* ==========================================================================
+   Frest Topbar (Floating Layout Navbar)
+   ========================================================================== */
+.av-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 62px;
+  padding: 0.65rem 1.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--frest-border);
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.05);
+}
+
+.av-search-wrap {
+  flex: 1;
+  max-width: 580px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--frest-light);
+  border: 1px solid var(--frest-border);
+  border-radius: 0.375rem;
+  padding: 0.25rem 0.5rem 0.25rem 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.av-search-wrap:focus-within {
+  border-color: var(--frest-primary);
+  background-color: #ffffff;
+  box-shadow: 0 0 0 0.2rem rgba(19, 149, 71, 0.15);
+}
+
+.av-search-wrap i,
+.av-search-wrap .material-icons {
+  font-size: 1.15rem;
+  color: var(--frest-muted);
+}
+
+.av-search-wrap input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 0.84rem;
+  color: var(--frest-dark);
+  padding: 0.25rem 0.25rem;
+}
+
+.av-search-wrap input:focus {
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+}
+
+.av-search-wrap .search-shortcut {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--frest-muted);
+  background-color: #ffffff;
+  border: 1px solid var(--frest-border);
+  border-radius: 4px;
+  padding: 0.15rem 0.4rem;
+  margin-right: 0.35rem;
+}
+
+.av-search-wrap .form-select {
+  border: none;
+  border-left: 1px solid var(--frest-border);
+  border-radius: 0;
+  background-color: transparent;
+  font-size: 0.8125rem;
+  color: var(--frest-body);
+  max-width: 140px;
+  padding: 0.25rem 0.5rem;
+}
+
+.av-search-wrap .form-select:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+.av-search-wrap .btn-search {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border-radius: 0.25rem;
+  background-color: var(--frest-primary);
+  color: #ffffff;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.av-search-wrap .btn-search:hover {
+  background-color: var(--frest-primary-hover);
+}
+
+.av-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.av-icon-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 0.375rem;
+  background-color: var(--frest-light);
+  border: 1px solid var(--frest-border);
+  color: var(--frest-body);
+  transition: all 0.2s ease;
+}
+
+.av-icon-btn:hover {
+  background-color: #ffffff;
+  border-color: var(--frest-primary);
+  color: var(--frest-primary);
+  box-shadow: var(--frest-box-shadow);
+}
+
+.av-icon-btn i,
+.av-icon-btn .material-icons {
+  font-size: 1.15rem;
+}
+
+.av-badge-dot {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 10rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  background-color: var(--frest-danger);
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* User Avatar Dropdown */
+.frest-user-avatar {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.frest-user-avatar img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.frest-user-avatar .online-indicator {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: var(--frest-success);
+  border: 2px solid #ffffff;
+}
+
+/* ==========================================================================
+   Page Header & Breadcrumbs
+   ========================================================================== */
+.av-page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.av-crumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.av-crumb-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 0.375rem;
+  background-color: #ffffff;
+  border: 1px solid var(--frest-border);
+  color: var(--frest-primary);
+  box-shadow: var(--frest-box-shadow);
+}
+
+.av-crumb-icon i,
+.av-crumb-icon .material-icons {
+  font-size: 1rem;
+}
+
+.av-crumb a {
+  color: var(--frest-muted);
+  font-weight: 500;
+}
+
+.av-crumb a:hover {
+  color: var(--frest-primary);
+}
+
+.av-crumb .sep {
+  font-size: 1rem;
+  color: var(--frest-muted);
+}
+
+.av-crumb b {
+  color: var(--frest-dark);
+  font-weight: 600;
+}
+
+.av-page-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ==========================================================================
+   Frest Card Components
+   ========================================================================== */
+.card,
+.av-card,
+.frest-card {
+  background-color: var(--frest-card-bg);
+  border: 0;
+  border-radius: 0.5rem;
+  box-shadow: var(--frest-box-shadow);
+  margin-bottom: 1.5rem;
+  transition: box-shadow 0.2s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+}
+
+.card:hover,
+.av-card:hover,
+.frest-card:hover {
+  box-shadow: var(--frest-box-shadow-hover);
+}
+
+.card-header,
+.frest-card-header {
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 0;
+  background-color: transparent;
+  border-bottom: 1px solid var(--frest-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-title,
+.av-card-title,
+.frest-card-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--frest-dark);
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-title i,
+.av-card-title i,
+.frest-card-title i {
+  color: var(--frest-primary);
+}
+
+.card-body,
+.frest-card-body {
+  flex: 1 1 auto;
+  padding: 1.5rem;
+}
+
+/* ==========================================================================
+   Frest Gamification Banner Card
+   ========================================================================== */
+.frest-gamification-card {
+  background: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.frest-gamification-card .gamification-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--frest-dark);
+  margin-bottom: 0.25rem;
+}
+
+.frest-gamification-card .gamification-sub {
+  font-size: 0.8125rem;
+  color: var(--frest-muted);
+  margin-bottom: 1rem;
+}
+
+.frest-gamification-card .gamification-highlight {
+  font-family: 'Rubik', sans-serif;
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--frest-primary);
+  margin-bottom: 0.35rem;
+}
+
+.frest-gamification-card .gamification-note {
+  font-size: 0.8rem;
+  color: var(--frest-body);
+  margin-bottom: 1.25rem;
+  line-height: 1.4;
+}
+
+.frest-gamification-card .gamification-art {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+}
+
+.frest-gamification-card .gamification-art svg {
+  max-width: 150px;
+  max-height: 160px;
+}
+
+/* ==========================================================================
+   Frest Metric & Statistic Cards
+   ========================================================================== */
+.frest-stat-card {
+  height: 100%;
+}
+
+.frest-stat-card .card-body {
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.avatar-initial {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 0.5rem;
+  font-size: 1.45rem;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.frest-stat-card:hover .avatar-initial {
+  transform: scale(1.08);
+}
+
+.avatar-initial.rounded-circle {
+  border-radius: 50% !important;
+}
+
+.stat-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--frest-muted);
+  margin-bottom: 0.2rem;
+  text-transform: capitalize;
+}
+
+.stat-value {
+  font-family: 'Rubik', sans-serif;
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--frest-dark);
+  margin-bottom: 0.2rem;
+  line-height: 1.1;
+}
+
+.stat-sub {
+  font-size: 0.72rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* ==========================================================================
+   Soft Badges (Frest bg-label-*)
+   ========================================================================== */
+.bg-label-primary {
+  background-color: var(--frest-primary-light) !important;
+  color: var(--frest-primary) !important;
+}
+
+.bg-label-secondary {
+  background-color: var(--frest-secondary-light) !important;
+  color: var(--frest-secondary) !important;
+}
+
+.bg-label-success {
+  background-color: var(--frest-success-light) !important;
+  color: var(--frest-success) !important;
+}
+
+.bg-label-danger {
+  background-color: var(--frest-danger-light) !important;
+  color: var(--frest-danger) !important;
+}
+
+.bg-label-warning {
+  background-color: var(--frest-warning-light) !important;
+  color: var(--frest-warning) !important;
+}
+
+.bg-label-info {
+  background-color: var(--frest-info-light) !important;
+  color: var(--frest-info) !important;
+}
+
+.badge {
+  padding: 0.35rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 0.25rem;
+  line-height: 1;
+}
+
+/* Status Badges */
+.badge-status {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 0.25rem;
+}
+
+.badge-completed,
+.badge-active {
+  background-color: var(--frest-success-light);
+  color: var(--frest-success);
+}
+
+.badge-pending,
+.badge-waiting {
+  background-color: var(--frest-warning-light);
+  color: var(--frest-warning);
+}
+
+.badge-cancelled,
+.badge-rejected {
+  background-color: var(--frest-danger-light);
+  color: var(--frest-danger);
+}
+
+.badge-processing,
+.badge-shipped {
+  background-color: var(--frest-info-light);
+  color: var(--frest-info);
+}
+
+.badge-unknown,
+.badge-closed {
+  background-color: var(--frest-secondary-light);
+  color: var(--frest-secondary);
+}
+
+/* ==========================================================================
+   Frest Split Card: Weekly Order Summary & Sales Overview
+   ========================================================================== */
+.frest-order-summary-card .split-left {
+  padding: 1.5rem;
+  border-right: 1px solid var(--frest-border-light);
+}
+
+.frest-order-summary-card .split-right {
+  padding: 1.5rem;
+}
+
+.frest-bar-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.5rem;
+  height: 160px;
+  padding: 1rem 0 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px dashed var(--frest-border);
+}
+
+.bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.bar-pill {
+  width: 100%;
+  max-width: 24px;
+  border-radius: 4px 4px 0 0;
+  background-color: var(--frest-primary-light);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.bar-pill.active {
+  background-color: var(--frest-primary);
+  box-shadow: var(--frest-primary-shadow);
+}
+
+.bar-pill:hover {
+  background-color: var(--frest-primary-hover);
+}
+
+.bar-day {
+  margin-top: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--frest-muted);
+}
+
+.progress {
+  background-color: var(--frest-light);
+  border-radius: 10rem;
+  overflow: hidden;
+}
+
+.progress-bar {
+  border-radius: 10rem;
+}
+
+/* ==========================================================================
+   Frest DataTables & Clean Tables
+   ========================================================================== */
+.table {
+  color: var(--frest-body);
+  font-size: 0.84rem;
+  vertical-align: middle;
+  margin-bottom: 0;
+}
+
+.table thead th {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--frest-muted);
+  background-color: #fafbfc;
+  border-top: none;
+  border-bottom: 1px solid var(--frest-border);
+  padding: 0.75rem 1rem;
+}
+
+.table tbody td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--frest-border-light);
+  color: var(--frest-dark);
+}
+
+.table tbody tr:hover td {
+  background-color: rgba(19, 149, 71, 0.03);
+}
+
+.table .order-thumb,
+.table .thumb {
+  width: 42px;
+  height: 42px;
+  border-radius: 0.375rem;
+  object-fit: cover;
+  border: 1px solid var(--frest-border);
+}
+
+.table-product-title {
+  font-weight: 600;
+  font-size: 0.84rem;
+  color: var(--frest-dark);
+}
+
+.table-product-sub {
+  font-size: 0.75rem;
+  color: var(--frest-muted);
+}
+
+/* ==========================================================================
+   Buyer Requirements & Activity Items
+   ========================================================================== */
+.frest-enquiry-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 0.5rem;
+  border-bottom: 1px solid var(--frest-border-light);
+  border-radius: 0.375rem;
+  transition: background-color 0.2s ease;
+}
+
+.frest-enquiry-item:last-child {
+  border-bottom: none;
+}
+
+.frest-enquiry-item:hover {
+  background-color: rgba(67, 89, 113, 0.03);
+}
+
+.enquiry-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 0.375rem;
+  background-color: var(--frest-primary-light);
+  color: var(--frest-primary);
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.enquiry-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--frest-dark);
+  margin-bottom: 0.15rem;
+}
+
+.enquiry-meta {
+  font-size: 0.74rem;
+  color: var(--frest-muted);
+}
+
+.enquiry-quote {
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+/* Notification & Activity Timeline */
+.frest-activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--frest-border-light);
+}
+
+.frest-activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--frest-primary-light);
+  color: var(--frest-primary);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.activity-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--frest-dark);
+  margin-bottom: 0.15rem;
+}
+
+.activity-sub {
+  font-size: 0.74rem;
+  color: var(--frest-muted);
+}
+
+/* ==========================================================================
+   Quick Actions Widget
+   ========================================================================== */
+.frest-action-tile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--frest-border);
+  background-color: #ffffff;
+  color: var(--frest-dark);
+  font-weight: 500;
+  font-size: 0.84rem;
+  transition: all 0.2s ease;
+}
+
+.frest-action-tile:hover {
+  background-color: var(--frest-primary-light);
+  border-color: var(--frest-primary);
+  color: var(--frest-primary);
+  transform: translateY(-1px);
+}
+
+.frest-action-tile i {
+  font-size: 1.25rem;
+  color: var(--frest-primary);
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.btn-primary,
+.btn-theme,
+.btn-av-primary {
+  background-color: var(--frest-primary) !important;
+  border-color: var(--frest-primary) !important;
+  color: #ffffff !important;
+  font-weight: 500;
+  font-size: 0.84rem;
+  border-radius: 0.375rem;
+  padding: 0.45rem 1rem;
+  box-shadow: var(--frest-primary-shadow);
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-primary:hover,
+.btn-theme:hover,
+.btn-av-primary:hover,
+.btn-primary:focus,
+.btn-theme:focus,
+.btn-av-primary:focus {
+  background-color: var(--frest-primary-hover) !important;
+  border-color: var(--frest-primary-hover) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 10px 0 rgba(19, 149, 71, 0.4);
+}
+
+.btn-outline-primary,
+.btn-av-outline {
+  background-color: transparent !important;
+  border-color: var(--frest-primary) !important;
+  color: var(--frest-primary) !important;
+  font-weight: 500;
+  font-size: 0.84rem;
+  border-radius: 0.375rem;
+  padding: 0.45rem 1rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-outline-primary:hover,
+.btn-av-outline:hover,
+.btn-outline-primary:focus,
+.btn-av-outline:focus {
+  background-color: var(--frest-primary-light) !important;
+  color: var(--frest-primary) !important;
+  border-color: var(--frest-primary) !important;
+}
+
+.btn-sm,
+.btn-av-outline.btn-sm,
+.btn-theme.btn-sm {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.78rem;
+}
+
+/* Round Table Icon Buttons */
+.table .btn-sm {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8125rem;
+  background-color: #ffffff;
+  border: 1px solid var(--frest-border);
+}
+
+.table .btn-outline-success {
+  color: var(--frest-success);
+  border-color: var(--frest-border);
+}
+
+.table .btn-outline-success:hover {
+  background-color: var(--frest-success-light);
+  border-color: var(--frest-success);
+  color: var(--frest-success);
+}
+
+.table .btn-outline-danger {
+  color: var(--frest-danger);
+  border-color: var(--frest-border);
+}
+
+.table .btn-outline-danger:hover {
+  background-color: var(--frest-danger-light);
+  border-color: var(--frest-danger);
+  color: var(--frest-danger);
+}
+
+/* ==========================================================================
+   Forms & Controls
+   ========================================================================== */
+.form-label,
+.av-form-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--frest-dark);
+  margin-bottom: 0.35rem;
+}
+
+.form-control,
+.form-select {
+  border: 1px solid var(--frest-border);
+  border-radius: 0.375rem;
+  font-size: 0.84rem;
+  color: var(--frest-dark);
+  padding: 0.45rem 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--frest-primary);
+  box-shadow: 0 0 0 0.2rem rgba(19, 149, 71, 0.15);
+  outline: none;
+}
+
+.form-control::placeholder {
+  color: var(--frest-muted);
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.av-footer {
+  margin-top: 2rem;
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--frest-border);
+  font-size: 0.8125rem;
+  color: var(--frest-muted);
+}
+
+.av-footer a {
+  color: var(--frest-primary);
+  font-weight: 500;
+}
+
+.av-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Empty States
+   ========================================================================== */
+.av-empty {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--frest-muted);
+  font-size: 0.85rem;
+}
+
+.av-empty i {
+  display: block;
+  font-size: 2.25rem;
+  margin-bottom: 0.75rem;
+  color: var(--frest-border);
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+@media (max-width: 1199.98px) {
+  .frest-order-summary-card .split-left {
+    border-right: none;
+    border-bottom: 1px solid var(--frest-border-light);
+  }
+}
+
+@media (max-width: 991.98px) {
+  .av-main {
+    padding: 1rem;
+  }
+  .av-topbar {
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* ==========================================================================
+   Utility Classes (Zero inline styles)
+   ========================================================================== */
+.progress-h6 {
+  height: 6px;
+}
+
+.bar-h-40 { height: 40%; }
+.bar-h-45 { height: 45%; }
+.bar-h-55 { height: 55%; }
+.bar-h-65 { height: 65%; }
+.bar-h-70 { height: 70%; }
+.bar-h-80 { height: 80%; }
+.bar-h-90 { height: 90%; }
+
+.w-pct-25 { width: 25%; }
+.w-pct-50 { width: 50%; }
+.w-pct-75 { width: 75%; }
+.w-pct-78 { width: 78%; }
+.w-pct-85 { width: 85%; }
+.w-pct-92 { width: 92%; }
+.w-pct-100 { width: 100%; }
+
+.gamification-svg {
+  width: 140px;
+  height: 140px;
+}
+
+/* ==========================================================================
+   Post New Ad / Edit Ad (Frest 2-Column Professional Layout)
+   ========================================================================== */
+.pa-subcats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pa-subcats .sub-group {
+  display: contents;
+}
+
+.pa-sub-hidden {
+  display: none !important;
+}
+
+.pa-subcats label {
+  border: 1px solid var(--frest-border);
+  border-radius: 0.375rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  margin: 0;
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+  color: var(--frest-body);
+}
+
+.pa-subcats label:hover {
+  border-color: var(--frest-primary);
+  color: var(--frest-primary);
+}
+
+.pa-subcats .btn-check:checked + label {
+  border-color: var(--frest-primary);
+  background-color: var(--frest-primary-light);
+  color: var(--frest-primary);
+  font-weight: 600;
+}
+
+/* Photo Upload component */
+.uploadImages {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.ph-block {
+  background-color: #fafbfc;
+  border: 1px dashed var(--frest-border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.ph-title {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--frest-dark);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ph-title small {
+  font-weight: 500;
+  color: var(--frest-muted);
+}
+
+.ph-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+}
+
+.ph-item {
+  position: relative;
+}
+
+.ph-item img {
+  width: 76px;
+  height: 76px;
+  object-fit: cover;
+  border-radius: 0.375rem;
+  border: 1px solid var(--frest-border);
+  background-color: #ffffff;
+  display: block;
+}
+
+.ph-item.main img {
+  width: 100%;
+  max-width: 150px;
+  height: 105px;
+}
+
+.ph-item .ph-actions {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: flex;
+  gap: 3px;
+}
+
+.ph-item button {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 0;
+  padding: 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  font-size: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease;
+}
+
+.ph-item button:hover {
+  background-color: #ffffff;
+  transform: scale(1.1);
+}
+
+.ph-item .js-ph-del {
+  color: var(--frest-danger);
+}
+
+.ph-item .js-ph-main {
+  color: var(--frest-warning);
+}
+
+.ph-none {
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--frest-muted);
+}
+
+/* ==========================================================================
+   Buyer & Expert Dashboard Extensions (Frest Theme)
+   ========================================================================== */
+.av-banner {
+  background: var(--frest-card-bg);
+  border: 1px solid var(--frest-border);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--frest-box-shadow);
+}
+
+.av-banner .meta-line {
+  color: var(--frest-muted);
+  font-size: 0.8125rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.av-banner .av-avatar-wrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--frest-primary-light);
+  flex-shrink: 0;
+}
+
+.av-banner .av-avatar-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.av-verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+  background-color: var(--frest-primary-light);
+  color: var(--frest-primary);
+}
+
+.btn-edit-profile {
+  background-color: var(--frest-primary);
+  color: #ffffff !important;
+  font-weight: 500;
+  font-size: 0.84rem;
+  border-radius: 0.375rem;
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--frest-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-edit-profile:hover {
+  background-color: var(--frest-primary-hover);
+  border-color: var(--frest-primary-hover);
+  color: #ffffff !important;
+  box-shadow: var(--frest-primary-shadow);
+}
+
+.av-mini-card {
+  background: var(--frest-card-bg);
+  border: 1px solid var(--frest-border);
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  margin-top: 1.25rem;
+  box-shadow: var(--frest-box-shadow);
+}
+
+.av-mini-card .av-card-title {
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--frest-dark);
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.av-mini-card .av-card-title i {
+  color: var(--frest-primary);
+}
+
+.verify-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--frest-border-light);
+  font-size: 0.84rem;
+}
+
+.verify-item:last-child {
+  border-bottom: none;
+}
+
+.verify-item i {
+  color: var(--frest-primary);
+  margin-top: 0.2rem;
+  font-size: 0.95rem;
+}
+
+.verify-item-sub {
+  font-size: 0.74rem;
+  color: var(--frest-muted);
+}
+
+.av-consult-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem;
+  border: 1px solid var(--frest-border);
+  border-radius: 0.5rem;
+  margin-top: 0.75rem;
+  background-color: #ffffff;
+  transition: border-color 0.2s ease;
+}
+
+.av-consult-row:hover {
+  border-color: var(--frest-primary);
+}
+
+.av-consult-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--frest-border);
+}
+
+.consult-title-text {
+  font-size: 0.87rem;
+  font-weight: 600;
+  color: var(--frest-dark);
+}
+
+.consult-sub-text {
+  font-size: 0.76rem;
+  color: var(--frest-muted);
+}
+
+.enquiry-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem;
+  border: 1px solid var(--frest-border);
+  border-radius: 0.5rem;
+  margin-top: 0.75rem;
+  background-color: #ffffff;
+  transition: border-color 0.2s ease;
+}
+
+.enquiry-row:hover {
+  border-color: var(--frest-primary);
+}
+
+.enquiry-ic {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--frest-primary-light);
+  color: var(--frest-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.95rem;
+}
+
+.enquiry-title-text {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--frest-dark);
+}
+
+.enquiry-sub-text {
+  font-size: 0.74rem;
+  color: var(--frest-muted);
+}
+
+.badge-role-expert {
+  background-color: var(--frest-primary-light);
+  color: var(--frest-primary);
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.25rem;
+}
+
+.av-article-card {
+  border: 1px solid var(--frest-border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background-color: #ffffff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.av-article-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--frest-box-shadow);
+}
+
+.av-article-card img {
+  width: 100%;
+  height: 125px;
+  object-fit: cover;
+}
+
+.av-article-body {
+  padding: 0.75rem 0.85rem;
+}
+
+.article-title-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--frest-dark);
+}
+
+.article-meta-text {
+  font-size: 0.74rem;
+  color: var(--frest-muted);
+  margin-top: 0.25rem;
+}
+
+.av-link-more {
+  color: var(--frest-primary);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.av-link-more:hover {
+  color: var(--frest-primary-hover);
+}
+
+
+

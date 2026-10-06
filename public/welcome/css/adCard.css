@@ -1,0 +1,145 @@
+/* ============================================
+   Ad card — shared by the public marketplace, "Similar products"
+   and the buyer / seller dashboards (services/includes/adCard).
+   Self-contained: its colours are defined here, icons are inline SVG.
+   ============================================ */
+
+.agv-ad {
+  --ad-line: #e3ece3;
+  --ad-green: #17663a;
+  --ad-green-btn: #1c7a44;
+  --ad-green-soft: #eaf8ed;
+  --ad-muted: #6d7d70;
+  background: #fff;
+  border: 1px solid var(--ad-line);
+  border-radius: 14px;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease;
+}
+.agv-ad:hover { box-shadow: 0 12px 28px rgba(20,60,30,.10); transform: translateY(-3px); border-color: #cfe3d2; }
+.agv-ad a { text-decoration: none; }
+
+.agv-ad-media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--ad-green-soft), #eef7ee);
+}
+/* Blurred copy of the photo fills the empty sides; the photo itself is shown whole on top. */
+.agv-ad-media::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  background: var(--photo, none) center / cover no-repeat;
+  filter: blur(14px) saturate(1.1);
+  opacity: .55;
+}
+.agv-ad-media.no-photo::before { display: none; }
+.agv-ad-media img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform .35s ease;
+}
+.agv-ad:hover .agv-ad-media img { transform: scale(1.04); }
+.agv-ad-noimg { display: none; color: var(--ad-green-btn); }
+.agv-ad-media:not(:has(img)) .agv-ad-noimg,
+.agv-ad-media.no-photo .agv-ad-noimg { display: block; }
+
+.agv-ad-chip, .agv-ad-photos {
+  position: absolute;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+  border-radius: 20px;
+  padding: 3px 10px;
+  max-width: calc(100% - 70px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.agv-ad-chip { top: 10px; left: 10px; background: rgba(255,255,255,.94); color: var(--ad-green); }
+.agv-ad-photos { bottom: 10px; right: 10px; background: rgba(15,30,20,.62); color: #fff; }
+
+.agv-ad-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+.agv-ad-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; min-width: 0; }
+.agv-ad-title {
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.35;
+  color: #17241a;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.agv-ad-title:hover { color: var(--ad-green); }
+.agv-ad-rating { flex-shrink: 0; display: inline-flex; align-items: center; gap: 3px; font-size: 12px; font-weight: 500; color: #7a5a12; background: #fff6e2; border-radius: 6px; padding: 2px 6px; }
+.agv-ad-rating svg { color: #f5a623; }
+
+.agv-ad-price { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-weight: 600; font-size: 18px; color: var(--ad-green); line-height: 1.25; }
+.agv-ad-nego { font-size: 10.5px; font-weight: 500; color: #b4700c; background: #fff4e5; border-radius: 20px; padding: 2px 8px; }
+
+.agv-ad-meta { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12.5px; color: var(--ad-muted); }
+.agv-ad-meta span { display: inline-flex; align-items: flex-start; gap: 5px; min-width: 0; overflow-wrap: anywhere; }
+.agv-ad-meta svg { flex-shrink: 0; margin-top: 2px; color: #97a89b; }
+
+.agv-ad-seller { display: flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 10px; border-top: 1px solid var(--ad-line); font-size: 12.5px; min-width: 0; }
+.agv-ad-meta + .agv-ad-seller { margin-top: auto; }
+.agv-ad-avatar { flex: 0 0 26px; height: 26px; border-radius: 50%; background: var(--ad-green-soft); color: var(--ad-green); font-weight: 500; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+.agv-ad-seller-name { flex: 1; min-width: 0; color: #37473c; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.agv-ad-verified { flex-shrink: 0; display: inline-flex; align-items: center; gap: 3px; color: var(--ad-green-btn); font-size: 11.5px; font-weight: 500; }
+
+.agv-ad-actions { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+.agv-ad-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ad-green);
+  background: #fff;
+  border: 1px solid #cfe3d2;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.agv-ad-btn svg { transition: transform .15s ease; }
+.agv-ad:hover .agv-ad-btn, .agv-ad-btn:hover { background: var(--ad-green-btn); border-color: var(--ad-green-btn); color: #fff; }
+.agv-ad-btn:hover svg { transform: translateX(3px); }
+/* optional second action (e.g. "Enquire Now" in the buyer dashboard) */
+.agv-ad-btn.alt { background: var(--ad-green-soft); border-color: var(--ad-green-soft); color: var(--ad-green); }
+.agv-ad:hover .agv-ad-btn.alt { background: var(--ad-green-soft); border-color: var(--ad-green-soft); color: var(--ad-green); }
+.agv-ad .agv-ad-btn.alt:hover { background: var(--ad-green); border-color: var(--ad-green); color: #fff; }
+
+/* Phones: two compact cards per row. */
+@media (max-width: 575.98px) {
+  .agv-ad { border-radius: 12px; }
+  .agv-ad:hover { transform: none; }
+  .agv-ad-chip { top: 6px; left: 6px; font-size: 9.5px; padding: 2px 7px; max-width: calc(100% - 12px); }
+  .agv-ad-photos { bottom: 6px; right: 6px; font-size: 9.5px; padding: 2px 7px; }
+  .agv-ad-body { padding: 10px; gap: 5px; }
+  .agv-ad-top { flex-direction: column; gap: 3px; }
+  .agv-ad-title { font-size: 13.5px; -webkit-line-clamp: 2; }
+  .agv-ad-rating { font-size: 10.5px; }
+  .agv-ad-price { font-size: 15px; gap: 4px; }
+  .agv-ad-nego { font-size: 9px; padding: 1px 6px; }
+  .agv-ad-meta { flex-direction: column; font-size: 11px; line-height: 1.35; }
+  .agv-ad-seller { gap: 6px; padding-top: 8px; font-size: 11px; }
+  .agv-ad-avatar { flex-basis: 22px; height: 22px; font-size: 10.5px; }
+  .agv-ad-verified > span { display: none; }
+  .agv-ad-btn { font-size: 12px; padding: 8px 6px; border-radius: 8px; }
+}
