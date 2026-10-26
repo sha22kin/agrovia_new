@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Welcome;
 
-use Image;
 use Auth;
 use Hash;
 use Str;
@@ -40,9 +39,9 @@ class WelcomeController extends Controller
     
     public function imageView(Request $r){
         if($r->imageUrl && is_numeric($r->weight) && is_numeric($r->height)){
-          $image = Image::make($r->imageUrl)->fit($r->weight,$r->height)->response();
+          $image = imageManager()->make($r->imageUrl)->fit($r->weight,$r->height)->response();
         }else{
-          $image = Image::make('public/medies/noimage.jpg')->fit(200,200)->response(); 
+          $image = imageManager()->make('public/medies/noimage.jpg')->fit(200,200)->response(); 
         }
         return $image;
     }
@@ -77,7 +76,7 @@ class WelcomeController extends Controller
         //     }
         // }
         
-        $mImage =Image::make($filePath);
+        $mImage =imageManager()->make($filePath);
         if($weight && $height){
             $mImage=$mImage->fit($weight,$height);
         }

@@ -7,7 +7,6 @@ use Str;
 use Hash;
 use File;
 use DB;
-use Image;
 use Artisan;
 use Session;
 use Validator;
@@ -41,7 +40,7 @@ class AdminController extends Controller
         $fullpath ="public/".$loadImage->file_path.'/'.$img;
         $path = public_path($loadImage->file_path.'/');
         
-        $image = Image::make($loadImage->file_url);
+        $image = imageManager()->make($loadImage->file_url);
         $image->fit($w,$h);
         $image->save($path.$img);
         

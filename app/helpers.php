@@ -13,8 +13,26 @@ use Carbon\Carbon;
 
 
 if (!function_exists('general')) {
+// Pages call general() hundreds of times (every title, asset link, price ...), so the settings row is
+// read from the database once per request and reused.
 function general(){
-  return $general =General::first();
+  static $general =null;
+  if($general===null){
+    $general =General::first();
+  }
+  return $general;
+}
+}
+
+// Intervention Image (v2) manager. Its Image facade can't be used any more: since Laravel 13 the
+// container key it resolves ('image') belongs to Laravel's own image service.
+if (!function_exists('imageManager')) {
+function imageManager(){
+  static $manager =null;
+  if($manager===null){
+    $manager =new \Intervention\Image\ImageManager(['driver'=>'gd']);
+  }
+  return $manager;
 }
 }
 
@@ -369,7 +387,7 @@ function uploadFile($file,$src,$srcType,$fileUse,$author=null,$fileStatus=true){
 if (!function_exists('uploadImageAsWebp')) {
 function uploadImageAsWebp($file,$src,$srcType,$fileUse,$author=null,$fileStatus=true,$size=null,$quality=85){
 
-  $image =\Intervention\Image\Facades\Image::make($file->getRealPath());
+  $image =imageManager()->make($file->getRealPath());
   if(function_exists('exif_read_data')){
     $image->orientate();
   }
@@ -428,14 +446,14 @@ function uploadCompressedImage($file,$src,$srcType,$fileUse,$author=null,$fileSt
   }
 
   try{
-    $image =\Intervention\Image\Facades\Image::make($file->getRealPath());
+    $image =imageManager()->make($file->getRealPath());
   }catch(\Throwable $e){
     // Intervention 2 does not know some formats GD can read (AVIF ...); give GD the file directly.
     $gd =@imagecreatefromstring((string) file_get_contents($file->getRealPath()));
     if(!$gd && function_exists('imagecreatefromavif')){
       $gd =@imagecreatefromavif($file->getRealPath());
     }
-    $image =$gd?\Intervention\Image\Facades\Image::make($gd):null;
+    $image =$gd?imageManager()->make($gd):null;
   }
   if(!$image){
     throw \Illuminate\Validation\ValidationException::withMessages([
