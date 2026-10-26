@@ -358,7 +358,7 @@
             min-height: 230px;
             background:
                 linear-gradient(180deg, rgba(20, 50, 20, 0.15) 0%, rgba(10, 30, 10, 0.45) 100%),
-                url('{{asset('public/welcome/images/hero-farmer.webp')}}') 70% 30%/cover no-repeat;
+                url('{{asset('public/welcome/images/register-farmers.jpg')}}') center 35%/cover no-repeat;
             display: flex;
             align-items: flex-end;
             padding: 24px;
