@@ -51,6 +51,27 @@
       <input class="form-control" value="{{old('company_name')?:$user->company_name}}" name="company_name" type="text" placeholder="e.g. Green Field Agro">
       @if ($errors->has('company_name'))<div class="invalid-feedback d-block">{{ $errors->first('company_name') }}</div>@endif
     </div>
+    @if($user->isSeller())
+    @php $farm = \App\Models\BusinessProfile::where('user_id',$user->id)->first(); @endphp
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Total Land Area</label>
+      <div class="input-group">
+        <input class="form-control" type="number" step="any" min="0" name="land_area" value="{{old('land_area', $farm && $farm->land_area !== null ? (float) $farm->land_area : '')}}" placeholder="e.g. 12">
+        <select class="form-select" name="land_unit" style="max-width:110px;" aria-label="Land unit">
+          @foreach(\App\Models\BusinessProfile::LAND_UNITS as $unit)
+          <option value="{{$unit}}" {{old('land_unit', $farm?->land_unit ?: 'Bigha')==$unit?'selected':''}}>{{$unit}}</option>
+          @endforeach
+        </select>
+      </div>
+      @if ($errors->has('land_area'))<div class="invalid-feedback d-block">{{ $errors->first('land_area') }}</div>@endif
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Main Crops or Products</label>
+      <input class="form-control" type="text" name="main_crops" maxlength="300" value="{{old('main_crops', $farm?->main_crops)}}" placeholder="e.g. Rice, Potato, Mustard">
+      <div class="form-text">Separate with commas.</div>
+      @if ($errors->has('main_crops'))<div class="invalid-feedback d-block">{{ $errors->first('main_crops') }}</div>@endif
+    </div>
+    @endif
     <div class="col-12 mb-3">
       <label class="form-label">About me</label>
       <textarea class="form-control" name="profile" rows="3" maxlength="500" placeholder="A short bio shown on your dashboard">{{old('profile')?:$user->profile}}</textarea>

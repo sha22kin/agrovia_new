@@ -42,6 +42,8 @@ trait BuildsDashboard
             'areas' => $business?->areas ?: $areas->filter()->unique()->implode(', '),
             'businessType' => $business?->business_type ?: ($user->company_name ?: ($role=='seller'?'Individual Seller':'Individual Buyer')),
             'businessVerified' => $license=='verified',
+            'landArea' => $business?->landLabel(),
+            'mainCrops' => $business?->main_crops,
             'currency' => general()->currency ?: '৳',
         ];
     }

@@ -8,6 +8,10 @@
     <dt>Company / Business</dt><dd>{{$user->company_name ?: '—'}}</dd>
     <dt>Business Type</dt><dd>{{$summary['businessType']}}</dd>
     <dt>Areas of Operation</dt><dd>{{$summary['areas'] ?: '—'}}</dd>
+    @if($summary['role']=='seller')
+    <dt>Total Land Area</dt><dd>{{$summary['landArea'] ?: '—'}}</dd>
+    <dt>Main Crops / Products</dt><dd>{{$summary['mainCrops'] ?: '—'}}</dd>
+    @endif
     <dt>Mobile</dt><dd>{{$user->mobile ?: '—'}}</dd>
     <dt>Email</dt><dd>{{$user->email ?: '—'}}</dd>
     <dt>Address</dt><dd>{{$user->address_line1 ?: '—'}}</dd>

@@ -77,7 +77,7 @@
     position:relative;
     background:
       linear-gradient(180deg, rgba(20,50,20,0.05) 0%, rgba(10,30,10,0.55) 100%),
-      url('https://images.unsplash.com/photo-1509099836639-18ba1795216d?q=80&w=1200&auto=format&fit=crop') center/cover no-repeat;
+      url('{{asset('public/welcome/images/auth-login.jpg')}}') 42% center/cover no-repeat;
     min-height:340px;
   }
 

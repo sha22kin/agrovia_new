@@ -2,12 +2,10 @@
   $marketPrices = $marketPrices ?? [];
   $topDemand = $topDemand ?? null;
   $firstPrice = $marketPrices[0] ?? null;
-  $hour = (int) now()->format('G');
-  $greeting = $hour < 12 ? 'Good Morning' : ($hour < 17 ? 'Good Afternoon' : 'Good Evening');
 @endphp
 <section class="hero">
   <div class="hero-bg" aria-hidden="true">
-    <img src="{{asset('public/welcome/images/hero-farmer.webp')}}" alt="">
+    <img src="{{asset('public/welcome/images/hero-farmer-app.webp')}}" alt="">
   </div>
   <div class="container">
     <div class="row hero-row">
@@ -15,8 +13,8 @@
         <h1>Empowering<br><span class="accent">Farmers.</span><br>Connecting<br><span class="accent">Markets.</span></h1>
         <p class="hero-desc">Buy, sell and grow together with Bangladesh's smart agriculture platform.</p>
         <div class="hero-ctas">
-          <button class="cta-primary">Get Started</button>
-          <button class="cta-secondary">Explore Marketplace <span class="cta-arrow">→</span></button>
+          <a href="{{route('register')}}" class="cta-primary">Get Started</a>
+          <a href="{{route('pageView','marketplace')}}" class="cta-secondary">Explore Marketplace <span class="cta-arrow">→</span></a>
         </div>
         <div class="hero-community">
           <div class="avatars">
@@ -71,38 +69,6 @@
           </div>
         </div>
 
-        <div class="phone">
-            <div class="phone-notch"></div>
-            <div class="phone-screen">
-              <div class="phone-top">
-                <span class="phone-brand">🌱 Agroviea</span>
-                <span class="phone-tools">🔍 🔔</span>
-              </div>
-              <div class="phone-greet">
-                <small>{{$greeting}},</small>
-                <div>{{auth()->check() ? \Illuminate\Support\Str::of(auth()->user()->name)->before(' ') : 'Farmer'}}</div>
-              </div>
-              <div class="phone-menu">
-                <div><span>🛒</span>Market</div>
-                <div><span>⛅</span>Weather</div>
-                <div><span>👥</span>Community</div>
-                <div><span>📦</span>Orders</div>
-              </div>
-              <div class="phone-section">Today's Prices</div>
-              <ul class="phone-prices" id="phonePrices">
-                @forelse(array_slice($marketPrices,0,3) as $item)
-                <li>
-                  <span class="item">{{$item['icon']}} {{$item['name']}}@if($item['name_bn']) ({{$item['name_bn']}})@endif</span>
-                  <span class="p">৳{{number_format($item['price'],2)}}/{{$item['unit']}}</span>
-                  <span class="c {{($item['change'] ?? 0) < 0 ? 'down' : 'up'}}">@if($item['change'] !== null){{$item['change'] < 0 ? '↓' : '↑'}} {{abs($item['change'])}}%@endif</span>
-                </li>
-                @empty
-                <li class="empty">Prices will appear here soon.</li>
-                @endforelse
-              </ul>
-              <div class="phone-all">View All</div>
-            </div>
-        </div>
       </div>
     </div>
 
@@ -171,16 +137,6 @@
     card.classList.remove('swap'); void card.offsetWidth; card.classList.add('swap');
   }
 
-  function renderPhone(){
-    var list = document.getElementById('phonePrices');
-    if(!list) return;
-    list.innerHTML = prices.length ? prices.slice(0,3).map(function(p){
-      return '<li><span class="item">' + esc(p.icon + ' ' + label(p)) + '</span>'
-        + '<span class="p">' + money(p.price) + '/' + esc(p.unit) + '</span>'
-        + '<span class="c ' + (p.change < 0 ? 'down' : 'up') + '">' + changeText(p.change) + '</span></li>';
-    }).join('') : '<li class="empty">Prices will appear here soon.</li>';
-  }
-
   function renderDemand(d){
     var card = document.getElementById('demandCard');
     if(!card) return;
@@ -197,7 +153,6 @@
       .then(function(data){
         if(!data) return;
         prices = data.prices || [];
-        renderPhone();
         renderDemand(data.demand);
         if(prices.length) showPrice();
       }).catch(function(){});

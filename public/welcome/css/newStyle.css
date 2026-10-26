@@ -220,21 +220,16 @@
   /* full-bleed field photo on the right, fading into the page on the left and bottom */
   .hero-bg{
     position:absolute;top:0;right:0;bottom:0;width:68%;overflow:hidden;
-    -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 16%);
-            mask-image:linear-gradient(90deg,transparent 0%,#000 16%);
   }
-  /* mirrored so the farmer stands mid-hero facing the cards; starts below the cards so his head stays clear */
+  /* farmer + app photo: pinned right so the farmer sits mid-hero and the photo's phone on the right */
   .hero-bg img{
-    position:absolute;left:7%;top:130px;bottom:0;height:calc(100% - 130px);width:auto;max-width:none;
-    transform:scaleX(-1);display:block;
-    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 22%);
-            mask-image:linear-gradient(180deg,transparent 0%,#000 22%);
+    width:100%;height:100%;object-fit:cover;object-position:right center;display:block;
   }
   .hero-bg::after{
-    content:'';position:absolute;inset:0;
+    content:'';position:absolute;inset:0;pointer-events:none;
     background:
-      linear-gradient(90deg,#f7faf5 0%,#f7faf5 7%,rgba(247,250,245,.6) 14%,rgba(247,250,245,0) 24%),
-      linear-gradient(180deg,rgba(247,250,245,0) 70%,rgba(247,250,245,.85) 100%);
+      linear-gradient(90deg,#f7faf5 0%,rgba(247,250,245,.85) 10%,rgba(247,250,245,0) 32%),
+      linear-gradient(180deg,rgba(247,250,245,0) 72%,rgba(247,250,245,.9) 100%);
   }
   .hero .container{position:relative;z-index:1;}
   .hero-row{gap:32px;align-items:flex-start;}
@@ -260,7 +255,7 @@
     font-size:52px;line-height:1.08;font-weight:800;color:#16241a;letter-spacing:-.01em;
   }
   .hero h1{
-    font-size:58px;line-height:1.1;font-weight:600;letter-spacing:-.02em;color:#141c16;
+    font-size:58px;line-height:1.1;font-weight:800;letter-spacing:-.025em;color:#141c16;
   }
   .hero h1 .accent{color:#1b6b34;}
   .hero-desc{
@@ -270,12 +265,16 @@
   .cta-primary{
     background:#1b6b34;color:#fff;padding:12px 26px;border-radius:7px;font-weight:500;font-size:15px;
     border:1px solid #1b6b34;cursor:pointer;transition:all .25s ease;
+    display:inline-flex;align-items:center;text-decoration:none;
   }
+  .cta-primary:hover{color:#fff;}
   .cta-primary:hover{background:var(--green-900);border-color:var(--green-900);transform:translateY(-2px);box-shadow:0 10px 22px rgba(15,61,36,.22);}
   .cta-secondary{
     background:rgba(255,255,255,.9);border:1px solid #1b6b34;color:#1b6b34;padding:12px 22px;border-radius:7px;
     font-weight:500;font-size:15px;cursor:pointer;transition:all .25s ease;display:inline-flex;align-items:center;gap:8px;
+    text-decoration:none;
   }
+  .cta-secondary:hover{color:#1b6b34;}
   .cta-secondary .cta-arrow{transition:transform .25s ease;}
   .cta-secondary:hover{background:var(--green-50);transform:translateY(-2px);box-shadow:0 10px 22px rgba(20,40,25,.08);}
   .cta-secondary:hover .cta-arrow{transform:translateX(4px);}
@@ -324,51 +323,6 @@
   .stat-change{font-size:11px;font-weight:500;margin-top:4px;min-height:14px;}
   .stat-change.up{color:#1b6b34;}
   .stat-change.down{color:#d14343;}
-
-  /* phone mockup */
-  .phone{
-    position:absolute;right:-8px;top:110px;width:228px;z-index:3;
-    background:#1b1f1c;border-radius:32px;padding:8px;
-    box-shadow:0 30px 60px rgba(15,30,20,.3);
-    transition:transform .4s ease;
-  }
-  .phone:hover{transform:translateY(-6px);}
-  .phone-notch{
-    position:absolute;top:8px;left:50%;transform:translateX(-50%);
-    width:78px;height:18px;background:#1b1f1c;border-radius:0 0 12px 12px;z-index:2;
-  }
-  .phone-screen{background:#fff;border-radius:25px;padding:28px 12px 14px;overflow:hidden;}
-  .phone-top{display:flex;justify-content:space-between;align-items:center;font-size:11px;}
-  .phone-brand{color:#1b6b34;font-weight:600;}
-  .phone-tools{font-size:10px;letter-spacing:4px;}
-  .phone-greet{
-    margin-top:12px;background:#1b6b34;
-    color:#fff;border-radius:10px;padding:12px;font-size:13px;font-weight:500;
-  }
-  .phone-greet small{display:block;font-size:10px;opacity:.85;font-weight:400;}
-  .phone-menu{display:flex;justify-content:space-between;margin-top:12px;}
-  .phone-menu div{
-    display:flex;flex-direction:column;align-items:center;gap:4px;font-size:8.5px;color:var(--muted);
-  }
-  .phone-menu span{
-    width:30px;height:30px;border-radius:9px;background:var(--green-50);
-    display:inline-flex;align-items:center;justify-content:center;font-size:14px;
-  }
-  .phone-section{margin-top:14px;font-size:11.5px;font-weight:600;color:#16241a;}
-  .phone-prices{list-style:none;margin:8px 0 0;padding:0;}
-  .phone-prices li{
-    display:flex;align-items:center;gap:6px;font-size:9.5px;padding:8px 0;border-bottom:1px solid #eef2ec;
-  }
-  .phone-prices .item{flex:1;min-width:0;color:#16241a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .phone-prices .p{color:#16241a;white-space:nowrap;}
-  .phone-prices .c{width:36px;text-align:right;font-weight:500;white-space:nowrap;}
-  .phone-prices .c.up{color:#1b6b34;}
-  .phone-prices .c.down{color:#d14343;}
-  .phone-prices li.empty{color:var(--muted);justify-content:center;border-bottom:none;padding:14px 0;}
-  .phone-all{
-    margin:10px auto 0;width:max-content;font-size:10px;color:#1b6b34;
-    background:var(--green-50);padding:5px 14px;border-radius:12px;
-  }
 
   /* ============ SEARCH (container/row/col) ============ */
   .search-wrap {
@@ -915,12 +869,11 @@
     .hero-row{gap:28px;}
     .hero-copy, .hero-visual{flex:0 0 100%; max-width:100%;}
     .hero-bg{width:100%;opacity:.18;-webkit-mask-image:none;mask-image:none;}
-    .hero-bg img{left:0;top:0;width:100%;height:100%;object-fit:cover;-webkit-mask-image:none;mask-image:none;}
+    .hero-bg img{object-position:62% center;}
     h1, .hero h1{font-size:36px;}
     .hero-visual{min-height:0;}
     .hero-cards{max-width:none;overflow-x:auto;padding-bottom:6px;}
     .hero-card{flex:0 0 170px;}
-    .phone{display:none;}
     .search-wrap{margin-top:28px;padding:16px;max-width:100%;}
     .search-cat{display:none;}
     .search-bar{flex-wrap:wrap;}

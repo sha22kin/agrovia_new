@@ -30,7 +30,19 @@ trait HandlesAccount
                 'profile' => 'nullable|max:500',
                 'company_name' => 'nullable|max:200',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+                // seller farm details
+                'land_area' => 'nullable|numeric|min:0|max:99999999',
+                'land_unit' => 'nullable|in:'.implode(',',\App\Models\BusinessProfile::LAND_UNITS),
+                'main_crops' => 'nullable|max:300',
             ]);
+
+            if($user->isSeller()){
+                $business =\App\Models\BusinessProfile::firstOrNew(['user_id'=>$user->id]);
+                $business->land_area =$r->filled('land_area') ? $r->land_area : null;
+                $business->land_unit =$r->filled('land_area') ? ($r->land_unit ?: 'Bigha') : null;
+                $business->main_crops =\App\Models\BuyerPreference::cleanInterests($r->main_crops);
+                $business->save();
+            }
 
             $user->name =$r->name;
             $user->gender =$r->gender;
