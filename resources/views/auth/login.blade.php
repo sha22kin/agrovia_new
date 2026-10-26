@@ -75,17 +75,9 @@
 
   .col-image{
     position:relative;
-    background:
-      linear-gradient(180deg, rgba(20,50,20,0.05) 0%, rgba(10,30,10,0.55) 100%),
-      url('{{asset('public/welcome/images/auth-login.jpg')}}') 42% center/cover no-repeat;
+    /* The photo already carries the Agroviea logo near the top, so it is anchored there and left without a dark overlay. */
+    background:url('{{asset('public/welcome/images/auth-login-farmer.jpg')}}') center top/cover no-repeat;
     min-height:340px;
-  }
-
-  .col-image::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:linear-gradient(180deg, transparent 40%, rgba(10,30,10,0.65) 100%);
   }
 
   .col-form{
@@ -467,7 +459,7 @@
   }
 
   @media (max-width:720px){
-    .col-image{min-height:220px;}
+    .col-image{min-height:320px;}
     .col-form{padding:32px 24px;}
   }
 </style>
