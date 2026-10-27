@@ -47,9 +47,9 @@
 
     <!-- Stylesheets: Legacy compatibility + Clean + Frest Theme -->
     <link rel="stylesheet" href="{{ asset(assetLinkExpert() . '/css/dashboard.css') }}">
-    <link rel="stylesheet" href="{{ asset(assetLinkExpert() . '/css/theme.css') }}">
+    <link rel="stylesheet" href="{{ assetV(assetLinkExpert() . '/css/theme.css') }}">
     <link rel="stylesheet" href="{{ asset(assetLinkExpert() . '/css/clean.css') }}">
-    <link rel="stylesheet" href="{{ asset(assetLinkExpert() . '/css/frest-theme.css') }}">
+    <link rel="stylesheet" href="{{ assetV(assetLinkExpert() . '/css/frest-theme.css') }}">
     @stack('css')
 </head>
 

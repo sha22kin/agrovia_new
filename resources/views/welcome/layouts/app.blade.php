@@ -41,10 +41,10 @@
         <link rel="stylesheet" href="{{asset('public/welcome/css/metisMenu.css')}}" />
         
         <!-- Custom Css for this Design -->
-        <link rel="stylesheet" href="{{asset('public/welcome/css/style.css')}}" />
-        <link rel="stylesheet" href="{{asset('public/welcome/css/newStyle.css')}}" />
-        <link rel="stylesheet" href="{{asset('public/welcome/css/pageStyle.css')}}" />
-        <link rel="stylesheet" href="{{asset('public/welcome/css/adCard.css')}}" />
+        <link rel="stylesheet" href="{{assetV('public/welcome/css/style.css')}}" />
+        <link rel="stylesheet" href="{{assetV('public/welcome/css/newStyle.css')}}" />
+        <link rel="stylesheet" href="{{assetV('public/welcome/css/pageStyle.css')}}" />
+        <link rel="stylesheet" href="{{assetV('public/welcome/css/adCard.css')}}" />
         
         
         
@@ -417,7 +417,7 @@ body {
         <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
 
         <!-- Custom Script for this Design -->
-        <script src="{{asset('public/welcome/js/myScript.js')}}"></script>
+        <script src="{{assetV('public/welcome/js/myScript.js')}}"></script>
         
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">

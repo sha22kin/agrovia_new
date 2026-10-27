@@ -6,7 +6,7 @@
   $chatOpen = $peer && (request()->filled('c') || $draft);
 @endphp
 @push('css')
-<link rel="stylesheet" href="{{asset('public/dashboard/css/chat.css')}}?v={{@filemtime(public_path('dashboard/css/chat.css'))}}">
+<link rel="stylesheet" href="{{assetV('public/dashboard/css/chat.css')}}">
 @endpush
 
 <h5 class="fw-bold mb-3">Messages</h5>

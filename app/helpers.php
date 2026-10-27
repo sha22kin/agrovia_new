@@ -75,6 +75,15 @@ function welcomeTheme(){
 }
 }
 
+// URL of a file in the project with its last change time as version ("style.css?v=1761..."). Browsers keep
+// CSS / JS for a week (.htaccess), so without it they would show an old file after a deploy.
+if (!function_exists('assetV')) {
+function assetV($path){
+  $time =@filemtime(base_path($path));
+  return asset($path).($time ? '?v='.$time : '');
+}
+}
+
 if (!function_exists('assetLink')) {
 function assetLink(){
   return 'public/'.general()->theme;
