@@ -23,6 +23,7 @@
 - বড় ছবিগুলো কমপ্রেস করা হয়েছে: **8.4MB থেকে 0.6MB** (লোগো, favicon, Google Play ব্যানার ইত্যাদি)
 - `.htaccess`-এ gzip compression আর ব্রাউজার ক্যাশিং চালু করা হয়েছে
 - হোম পেজ আগে একসাথে সব product লোড করত, এখন শুধু ৮টা
+- নিজেদের CSS/JS ফাইলের লিংকে ফাইল শেষ কবে বদলেছে তার সময় যোগ হয় (`newStyle.css?v=...`)। এতে আপলোডের পর browser পুরনো ডিজাইন দেখায় না (`assetV()` helper) — `35c6159`
 
 ---
 
@@ -72,6 +73,21 @@
 - পুরো উচ্চতার চ্যাট কার্ড, সার্চসহ "Chats" তালিকা, Today/Yesterday লেবেল, সাদা/সবুজ বাবল, pinned পট্টি, গোল send বাটন
 - মোবাইলে একবারে একটা অংশ দেখায় (তালিকা অথবা চ্যাট), সাথে back বাটন। মেসেজে tap করলে বাটনগুলো আসে
 - চ্যাটের সব স্টাইল এক ফাইলে: `public/dashboard/css/chat.css`
+
+### ঠিক করা bug — `2b0a239`
+- একই সেকেন্ডে দুটো কাজ হলে (যেমন like করেই pin) দ্বিতীয়টা অন্যজনের স্ক্রিনে পৌঁছাত না। এখন প্রতিটা মেসেজের seen, pin, delete আর like-এর অবস্থা মিলিয়ে দেখা হয়
+
+### Database আপডেট — `dcf351a`
+- Terminal ছাড়া phpMyAdmin দিয়ে database আপডেট করার জন্য SQL ফাইল: `database/sql/2026_10_october_updates.sql`
+- `.htaccess`-এ `.sql` ফাইল ডাউনলোড বন্ধ
+
+---
+
+## পরীক্ষা
+- সব PHP ফাইল আর ৩১১টা Blade view-এ PHP 8.2 ও 8.4 দুটোতেই কোনো syntax ভুল নেই
+- guest, admin, buyer, seller আর expert হিসেবে ১৬৬টা পেজ request, কোনো 500 error নেই
+- চ্যাটের ১৪টা ব্রাউজার টেস্ট (buyer ও seller দুটো আলাদা Chrome-এ) পাস
+- GitHub থেকে নতুন clone করে PHP 8.2-এ `composer install` চালালে app চালু হয়, `php artisan optimize` পাস করে
 
 ---
 
