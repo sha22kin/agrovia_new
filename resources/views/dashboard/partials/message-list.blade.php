@@ -9,7 +9,7 @@
   <img src="{{$other?->avatar(80)}}" alt="{{$other?->name}}">
   <div class="flex-grow-1 overflow-hidden">
     <div class="av-msg-name">{{$other?->name ?: 'Deleted user'}}</div>
-    <div class="av-msg-preview">{{$last ? ($last->sender_id==$me?'You: ':'').Str::limit(strip_tags($last->body),40) : ''}}</div>
+    <div class="av-msg-preview">{{$last ? ($last->sender_id==$me?'You: ':'').$last->preview(40) : ''}}</div>
   </div>
   <div class="text-end">
     <div class="av-msg-time">{{$conversation->last_message_at?->shortAbsoluteDiffForHumans()}}</div>

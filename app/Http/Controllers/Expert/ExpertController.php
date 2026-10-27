@@ -593,6 +593,10 @@ class ExpertController extends Controller
         return $this->messagesPoll($r,'expert');
     }
 
+    public function messageAction(Request $r){
+        return $this->messagesAction($r,'expert');
+    }
+
     public function soon(Request $r,$page){
         abort_unless(isset(self::SOON[$page]),404);
 

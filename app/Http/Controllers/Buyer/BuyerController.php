@@ -281,6 +281,10 @@ class BuyerController extends Controller
         return $this->messagesPoll($r,'buyer');
     }
 
+    public function messageAction(Request $r){
+        return $this->messagesAction($r,'buyer');
+    }
+
     public function profilePhoto(Request $r){
         return $this->accountPhoto($r);
     }

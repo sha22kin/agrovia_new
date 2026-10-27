@@ -82,6 +82,7 @@ Route::group(['prefix'=>'buyer', 'as'=>'buyer.','middleware'=>['auth','role:buye
     Route::get('/messages',[BuyerController::class,'messages'])->name('messages');
     Route::post('/messages',[BuyerController::class,'messageSend'])->name('messageSend');
     Route::get('/messages/poll',[BuyerController::class,'messagePoll'])->name('messagesPoll');
+    Route::post('/messages/action',[BuyerController::class,'messageAction'])->name('messageAction');
     Route::get('/marketplace',[BuyerController::class,'marketplace'])->name('marketplace');
     Route::get('/marketplace/{id}',[BuyerController::class,'marketplaceView'])->whereNumber('id')->name('marketplaceView');
     Route::get('/wishlist',[BuyerController::class,'wishlist'])->name('wishlist');
@@ -141,6 +142,7 @@ Route::group(['prefix'=>'seller', 'as'=>'seller.','middleware'=>['auth','role:se
     Route::get('/messages',[SellerController::class,'messages'])->name('messages');
     Route::post('/messages',[SellerController::class,'messageSend'])->name('messageSend');
     Route::get('/messages/poll',[SellerController::class,'messagePoll'])->name('messagesPoll');
+    Route::post('/messages/action',[SellerController::class,'messageAction'])->name('messageAction');
 
 });
 
@@ -179,6 +181,7 @@ Route::group(['prefix'=>'expert', 'as'=>'expert.','middleware'=>['auth','role:ex
     Route::get('/messages',[ExpertController::class,'messages'])->name('messages');
     Route::post('/messages',[ExpertController::class,'messageSend'])->name('messageSend');
     Route::get('/messages/poll',[ExpertController::class,'messagePoll'])->name('messagesPoll');
+    Route::post('/messages/action',[ExpertController::class,'messageAction'])->name('messageAction');
 
     // Pages that wait for their design (consultations, q&a, articles, availability, earnings, reviews).
     foreach(array_keys(ExpertController::SOON) as $page){

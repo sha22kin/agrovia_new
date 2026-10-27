@@ -281,6 +281,10 @@ class SellerController extends Controller
         return $this->messagesPoll($r,'seller');
     }
 
+    public function messageAction(Request $r){
+        return $this->messagesAction($r,'seller');
+    }
+
     public function profilePhoto(Request $r){
         return $this->accountPhoto($r);
     }
