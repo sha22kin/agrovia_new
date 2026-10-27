@@ -110,11 +110,12 @@ class WelcomeController extends Controller
     //   Artisan::call('route:clear');
     //   Artisan::call('clear-compiled');
       
-      // The landing page "Featured products" cards: every live ad (type=3), newest first.
+      // The landing page "Featured products" cards: the 8 newest live ads (type=3); "See more" leads to the marketplace.
       $latestServices =Post::live()
           ->with(['category','district','thana','user','galleryFiles'])
           ->withAvg(['postComments as avg_rating'],'rating')
           ->latest()
+          ->take(8)
           ->get();
 
       foreach($latestServices as $service){

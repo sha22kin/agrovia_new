@@ -451,6 +451,18 @@
   .view-all:hover{gap:12px;color:var(--green-700);}
 
   .featured .row{row-gap:24px;}
+  .see-more-wrap{text-align:center;margin-top:34px;}
+  .btn-see-more{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--green-700);color:#fff;
+    padding:13px 34px;border-radius:30px;font-weight:600;font-size:15px;
+    transition:background .3s ease, transform .25s ease, box-shadow .3s ease, gap .25s ease;
+  }
+  .btn-see-more:hover{
+    background:var(--green-900);color:#fff;gap:12px;
+    transform:translateY(-2px);
+    box-shadow:0 10px 20px rgba(15,61,36,.28);
+  }
   .featured .second-row{margin-top:24px;}
 
   .product-card{

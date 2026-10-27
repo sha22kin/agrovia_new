@@ -66,7 +66,7 @@
         <h2>Featured products</h2>
         <p>Live listings from verified farmers, suppliers and agro companies.</p>
       </div>
-      <a class="view-all" href="#">View all →</a>
+      <a class="view-all" href="{{route('pageView','marketplace')}}">View all →</a>
     </div>
 
     <div class="row">
@@ -107,6 +107,12 @@
       <p class="text-secondary" style="padding:20px 0;">No featured ads yet. Once sellers post live ads, they'll show up here.</p>
       @endforelse
     </div>
+
+    @if($latestServices->isNotEmpty())
+    <div class="see-more-wrap">
+      <a class="btn-see-more" href="{{route('pageView','marketplace')}}">See more products →</a>
+    </div>
+    @endif
   </div>
 </section>
 
