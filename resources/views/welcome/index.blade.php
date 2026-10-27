@@ -225,51 +225,36 @@
     @php
       // Sample requirements for the landing page; the RFQ page lists the real, approved ones.
       $rfqs = [
-        ['title' => '10,000 kg Potato needed in Dhaka', 'buyer' => 'Metro Super Shop', 'loc' => 'Dhaka', 'posted' => '2 hours ago', 'qty' => '10,000 kg', 'budget' => '৳20 – ৳24/kg', 'delivery' => 'Within 7 days', 'quotes' => 12],
-        ['title' => 'Bulk Rui & Katla fish for restaurant chain', 'buyer' => 'Spice Garden Restaurants', 'loc' => 'Chattogram', 'posted' => '5 hours ago', 'qty' => '1,500 kg / month', 'budget' => '৳250 – ৳300/kg', 'delivery' => 'Recurring monthly', 'quotes' => 5],
-        ['title' => 'Organic compost for 20 acre farm', 'buyer' => 'Green Valley Agro', 'loc' => 'Rangpur', 'posted' => '1 day ago', 'qty' => '40 tons', 'budget' => 'Negotiable', 'delivery' => 'Within 15 days', 'quotes' => 8],
-        ['title' => 'Maize supply for feed mill', 'buyer' => 'Nutri Feed Industries', 'loc' => 'Gazipur', 'posted' => '2 days ago', 'qty' => '80,000 kg', 'budget' => '৳28 – ৳31/kg', 'delivery' => 'Within 30 days', 'quotes' => 17],
+        ['title' => '10,000 kg Potato needed in Dhaka', 'image' => 'potato', 'buyer' => 'Metro Super Shop', 'loc' => 'Dhaka', 'qty' => '10,000 kg', 'budget' => '৳20 – ৳24/kg', 'delivery' => 'Within 7 days', 'quotes' => 12],
+        ['title' => 'Bulk Rui & Katla fish for restaurant chain', 'image' => 'fish', 'buyer' => 'Spice Garden Restaurants', 'loc' => 'Chattogram', 'qty' => '1,500 kg / month', 'budget' => '৳250 – ৳300/kg', 'delivery' => 'Recurring monthly', 'quotes' => 5],
+        ['title' => 'Organic compost for 20 acre farm', 'image' => 'compost', 'buyer' => 'Green Valley Agro', 'loc' => 'Rangpur', 'qty' => '40 tons', 'budget' => 'Negotiable', 'delivery' => 'Within 15 days', 'quotes' => 8],
+        ['title' => 'Maize supply for feed mill', 'image' => 'maize', 'buyer' => 'Nutri Feed Industries', 'loc' => 'Gazipur', 'qty' => '80,000 kg', 'budget' => '৳28 – ৳31/kg', 'delivery' => 'Within 30 days', 'quotes' => 17],
       ];
     @endphp
 
     <div class="row">
       @foreach($rfqs as $rfq)
       <div class="rfq-card">
-        <div class="rfq-top">
+        <a href="{{route('pageView','rfq')}}" class="rfq-thumb">
+          <img src="{{asset('public/welcome/images/rfq/'.$rfq['image'].'.jpg')}}" alt="{{$rfq['title']}}" loading="lazy">
           <span class="rfq-status"><i></i> Open</span>
-          <span class="rfq-time">{{$rfq['posted']}}</span>
-        </div>
+          <span class="rfq-quotes">{{$rfq['quotes']}} quotes</span>
+        </a>
 
-        <h4>{{$rfq['title']}}</h4>
-        <div class="rfq-meta">
-          <span>
+        <div class="rfq-body">
+          <h4><a href="{{route('pageView','rfq')}}">{{$rfq['title']}}</a></h4>
+          <div class="rfq-buyer">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/></svg>
-            {{$rfq['buyer']}}
-          </span>
-          <span>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
-            {{$rfq['loc']}}
-          </span>
-        </div>
+            {{$rfq['buyer']}} · {{$rfq['loc']}}
+          </div>
 
-        <div class="rfq-facts">
-          <div>
-            <div class="label">Quantity</div>
-            <div class="value qty">{{$rfq['qty']}}</div>
+          <div class="rfq-facts">
+            <div><span>Quantity</span><b class="qty">{{$rfq['qty']}}</b></div>
+            <div><span>Budget</span><b>{{$rfq['budget']}}</b></div>
+            <div><span>Delivery</span><b>{{$rfq['delivery']}}</b></div>
           </div>
-          <div>
-            <div class="label">Budget</div>
-            <div class="value">{{$rfq['budget']}}</div>
-          </div>
-          <div>
-            <div class="label">Delivery</div>
-            <div class="value">{{$rfq['delivery']}}</div>
-          </div>
-        </div>
 
-        <div class="rfq-footer">
-          <span class="rfq-quotes"><b>{{$rfq['quotes']}}</b> quotes received</span>
-          <a class="btn-submit-quote" href="{{route('pageView','rfq')}}">Submit quote →</a>
+          <a class="btn-submit-quote" href="{{route('pageView','rfq')}}">Submit quote</a>
         </div>
       </div>
       @endforeach
