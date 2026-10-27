@@ -10,27 +10,9 @@
       <div class="p-2">
         <input type="text" id="msgSearch" class="form-control mb-2" placeholder="Search messages...">
 
-        @forelse($conversations as $conversation)
-        @php
-          $other = $conversation->{$peerKey};
-          $last = $conversation->lastMessage;
-        @endphp
-        <a href="{{route($role.'.messages',['c'=>$conversation->id])}}" class="av-msg-item {{$conversation->unread_count?'unread':''}} {{$selected && $selected->id==$conversation->id?'active':''}} text-decoration-none text-reset" data-search="{{strtolower(($other?->name ?: '').' '.($last?->body ?: ''))}}">
-          <img src="{{$other?->avatar(80)}}" alt="{{$other?->name}}">
-          <div class="flex-grow-1 overflow-hidden">
-            <div class="av-msg-name">{{$other?->name ?: 'Deleted user'}}</div>
-            <div class="av-msg-preview">{{$last ? ($last->sender_id==$me?'You: ':'').Str::limit(strip_tags($last->body),40) : ''}}</div>
-          </div>
-          <div class="text-end">
-            <div class="av-msg-time">{{$conversation->last_message_at?->shortAbsoluteDiffForHumans()}}</div>
-            @if($conversation->unread_count)<span class="av-msg-badge">{{$conversation->unread_count}}</span>@endif
-          </div>
-        </a>
-        @empty
-        <div class="av-empty py-4"><i class="fa-regular fa-message"></i>
-          @if($role=='buyer')No messages yet. Open an ad and tap "Chat" to talk to the seller.@elseif($role=='expert')No messages yet. Messages from farmers will appear here.@else No messages yet. Buyers' messages will appear here.@endif
+        <div id="msgList">
+          @include('dashboard.partials.message-list')
         </div>
-        @endforelse
       </div>
     </div>
 
@@ -48,30 +30,17 @@
       </div>
       <div class="flex-grow-1 p-3 av-thread" id="msgThread">
         @forelse($thread as $message)
-        <div class="av-thread-bubble {{$message->sender_id==$me?'me':'them'}}">
-          @if($message->post)
-          <a href="{{route('serviceView',$message->post->slug ?: 'no-title')}}" target="_blank" class="av-msg-ad">
-            <img src="{{asset($message->post->fiImage())}}" alt="{{$message->post->name}}">
-            <div class="overflow-hidden">
-              <small>About this ad</small>
-              <b>{{$message->post->name}}</b>
-              <span>৳{{number_format($message->post->price)}}</span>
-            </div>
-          </a>
-          @endif
-          {!! nl2br(e($message->body)) !!}
-          <div class="av-thread-time">{{$message->created_at?->format('M d, h:i A')}}</div>
-        </div>
+        @include('dashboard.partials.message-bubble')
         @empty
-        <div class="av-empty"><i class="fa-regular fa-message"></i>Say hello to {{$peer->name}}.</div>
+        <div class="av-empty" id="msgEmpty"><i class="fa-regular fa-message"></i>Say hello to {{$peer->name}}.</div>
         @endforelse
       </div>
-      <form method="POST" action="{{route($role.'.messageSend')}}" class="p-3 border-top">
+      <form method="POST" action="{{route($role.'.messageSend')}}" class="p-3 border-top" id="msgForm">
         @csrf
         @if($selected)<input type="hidden" name="conversation" value="{{$selected->id}}">@else<input type="hidden" name="to" value="{{$peer->id}}">@endif
         @if($aboutAd)
-        <input type="hidden" name="ad" value="{{$aboutAd->id}}">
-        <div class="av-msg-reply">
+        <div class="av-msg-reply" id="msgReply">
+          <input type="hidden" name="ad" value="{{$aboutAd->id}}">
           <a href="{{route('serviceView',$aboutAd->slug ?: 'no-title')}}" target="_blank" class="av-msg-ad">
             <img src="{{asset($aboutAd->fiImage())}}" alt="{{$aboutAd->name}}">
             <div class="overflow-hidden">
@@ -87,7 +56,7 @@
           <input type="text" class="form-control @error('body') is-invalid @enderror" name="body" value="{{old('body')}}" maxlength="2000" placeholder="Type a message..." autocomplete="off" required>
           <button type="submit" class="btn-av-primary" title="Send"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
-        @error('body')<div class="invalid-feedback d-block">{{$message}}</div>@enderror
+        <div class="invalid-feedback d-block" id="msgError">@error('body'){{$message}}@enderror</div>
       </form>
       @else
       <div class="av-empty my-auto"><i class="fa-regular fa-comments"></i>Select a conversation to read it.</div>
@@ -100,14 +69,99 @@
 <script>
   (function () {
     var thread = document.getElementById('msgThread');
-    if (thread) { thread.scrollTop = thread.scrollHeight; }
+    var list = document.getElementById('msgList');
+    var form = document.getElementById('msgForm');
     var search = document.getElementById('msgSearch');
-    if (search) {
-      search.addEventListener('input', function () {
-        var q = search.value.toLowerCase();
-        document.querySelectorAll('.av-msg-item').forEach(function (el) {
-          el.classList.toggle('d-none', (el.dataset.search || '').indexOf(q) === -1);
-        });
+    var pollUrl = @json(route($role.'.messagesPoll'));
+    var conversationId = @json($selected?->id);
+
+    function scrollDown() { if (thread) { thread.scrollTop = thread.scrollHeight; } }
+    function lastId() {
+      var bubbles = thread ? thread.querySelectorAll('.av-thread-bubble[data-id]') : [];
+      return bubbles.length ? bubbles[bubbles.length - 1].dataset.id : 0;
+    }
+    function filterList() {
+      var q = (search ? search.value : '').toLowerCase();
+      document.querySelectorAll('.av-msg-item').forEach(function (el) {
+        el.classList.toggle('d-none', (el.dataset.search || '').indexOf(q) === -1);
+      });
+    }
+    // Adds bubbles the thread does not show yet (a poll and a send can return the same message).
+    function appendBubbles(html) {
+      if (!thread || !html) { return; }
+      var box = document.createElement('div');
+      box.innerHTML = html;
+      var added = false;
+      box.querySelectorAll('.av-thread-bubble').forEach(function (bubble) {
+        if (!thread.querySelector('.av-thread-bubble[data-id="' + bubble.dataset.id + '"]')) {
+          thread.appendChild(bubble);
+          added = true;
+        }
+      });
+      if (added) {
+        var empty = document.getElementById('msgEmpty');
+        if (empty) { empty.remove(); }
+        scrollDown();
+      }
+    }
+
+    scrollDown();
+    if (search) { search.addEventListener('input', filterList); }
+
+    // New messages and the inbox list are fetched every few seconds, so nobody has to reload the page.
+    var polling = false;
+    function poll() {
+      if (polling || document.hidden) { return; }
+      polling = true;
+      var url = pollUrl + '?after=' + lastId() + (conversationId ? '&c=' + conversationId : '');
+      fetch(url, { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, credentials: 'same-origin' })
+        .then(function (res) { return res.ok ? res.json() : null; })
+        .then(function (data) {
+          if (!data) { return; }
+          appendBubbles(data.html);
+          if (list && typeof data.list === 'string') { list.innerHTML = data.list; filterList(); }
+        })
+        .catch(function () {})
+        .finally(function () { polling = false; });
+    }
+    setInterval(poll, 4000);
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) { poll(); } });
+
+    // Sending without leaving the page.
+    if (form) {
+      var input = form.querySelector('input[name="body"]');
+      var button = form.querySelector('button[type="submit"]');
+      var error = document.getElementById('msgError');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!input.value.trim()) { return; }
+        button.disabled = true;
+        error.textContent = '';
+        input.classList.remove('is-invalid');
+        fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+          credentials: 'same-origin'
+        })
+          .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+          .then(function (r) {
+            if (!r.ok) {
+              var msg = r.data && r.data.errors && r.data.errors.body ? r.data.errors.body[0] : (r.data && r.data.message) || 'The message could not be sent.';
+              error.textContent = msg;
+              input.classList.add('is-invalid');
+              return;
+            }
+            // The first message of a new chat creates the conversation: open it.
+            if (!conversationId) { window.location = r.data.url; return; }
+            input.value = '';
+            var reply = document.getElementById('msgReply');
+            if (reply) { reply.remove(); history.replaceState(null, '', r.data.url); }
+            appendBubbles(r.data.html);
+            poll();
+          })
+          .catch(function () { error.textContent = 'The message could not be sent. Check your connection.'; })
+          .finally(function () { button.disabled = false; input.focus(); });
       });
     }
   })();

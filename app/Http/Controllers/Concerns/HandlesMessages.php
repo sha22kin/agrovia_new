@@ -44,10 +44,7 @@ trait HandlesMessages
             Message::where('conversation_id',$selected->id)->where('sender_id','<>',$user->id)->whereNull('read_at')->update(['read_at'=>now()]);
         }
 
-        $conversations =Conversation::where($mine,$user->id)
-            ->with([$peerRelation.'.imageFile','lastMessage'])
-            ->withCount(['messages as unread_count' => fn ($q) => $q->where('sender_id','<>',$user->id)->whereNull('read_at')])
-            ->orderByDesc('last_message_at')->get();
+        $conversations =$this->inboxList($user,$mine,$peerRelation);
 
         $peer =$selected?$selected->{$peerRelation}:$draft;
         $thread =$selected?$selected->messages()->with('post.galleryFiles')->latest('id')->take(200)->get()->reverse()->values():collect();
@@ -56,6 +53,40 @@ trait HandlesMessages
         $aboutAd =$role=='buyer' && $peer ? $this->sellerAd($peer->id,$r->ad) : null;
 
         return view($view,compact('role','conversations','selected','draft','peer','thread','aboutAd'));
+    }
+
+    // The user's chats, newest first, with how many messages they did not read.
+    protected function inboxList($user, $mine, $peerRelation){
+        return Conversation::where($mine,$user->id)
+            ->with([$peerRelation.'.imageFile','lastMessage'])
+            ->withCount(['messages as unread_count' => fn ($q) => $q->where('sender_id','<>',$user->id)->whereNull('read_at')])
+            ->orderByDesc('last_message_at')->get();
+    }
+
+    // Called every few seconds by an open inbox: the messages of the open chat after the last one it shows
+    // (they count as read now) and the refreshed conversation list.
+    protected function messagesPoll(Request $r, $role){
+
+        $user =Auth::user();
+        $me =$user->id;
+        $mine =$role=='buyer'?'buyer_id':'seller_id';
+        $peerRelation =$role=='buyer'?'seller':'buyer';
+
+        $selected =$r->c?Conversation::where($mine,$me)->find($r->c):null;
+
+        $html ='';
+        if($selected){
+            $new =$selected->messages()->with('post.galleryFiles')->where('id','>',(int) $r->after)->orderBy('id')->take(100)->get();
+            Message::whereIn('id',$new->pluck('id'))->where('sender_id','<>',$me)->whereNull('read_at')->update(['read_at'=>now()]);
+            foreach($new as $message){
+                $html .=view('dashboard.partials.message-bubble',compact('message','me'))->render();
+            }
+        }
+
+        $conversations =$this->inboxList($user,$mine,$peerRelation);
+        $list =view('dashboard.partials.message-list',compact('role','conversations','selected','me'))->render();
+
+        return response()->json(['html'=>$html,'list'=>$list]);
     }
 
     // A live ad of the seller, or null.
@@ -89,6 +120,9 @@ trait HandlesMessages
         }
 
         if(!$conversation){
+            if($r->expectsJson()){
+                return response()->json(['message'=>'This chat is not found'],404);
+            }
             Session()->flash('error','This chat is not found');
             return redirect()->route($role.'.messages');
         }
@@ -104,6 +138,18 @@ trait HandlesMessages
         $conversation->save();
         $conversation->messages()->save($message);
 
-        return redirect()->route($role.'.messages',['c'=>$conversation->id]);
+        $url =route($role.'.messages',['c'=>$conversation->id]);
+
+        // The inbox sends with fetch and adds the returned bubble itself.
+        if($r->expectsJson()){
+            $me =$user->id;
+            $message->load('post.galleryFiles');
+            return response()->json([
+                'html' => view('dashboard.partials.message-bubble',compact('message','me'))->render(),
+                'url'  => $url,
+            ]);
+        }
+
+        return redirect($url);
     }
 }
