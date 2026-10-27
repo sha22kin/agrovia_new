@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Concerns;
 use Auth;
 use App\Models\Conversation;
 use App\Models\Message;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -28,7 +29,7 @@ trait HandlesMessages
             if($seller && $seller->id!=$user->id && ($seller->isSeller() || $seller->isExpert())){
                 $existing =Conversation::where($mine,$user->id)->where('seller_id',$seller->id)->first();
                 if($existing){
-                    return redirect()->route($role.'.messages',['c'=>$existing->id]);
+                    return redirect()->route($role.'.messages',array_filter(['c'=>$existing->id,'ad'=>$r->ad]));
                 }
                 $draft =$seller;
             }
@@ -49,9 +50,20 @@ trait HandlesMessages
             ->orderByDesc('last_message_at')->get();
 
         $peer =$selected?$selected->{$peerRelation}:$draft;
-        $thread =$selected?$selected->messages()->latest('id')->take(200)->get()->reverse()->values():collect();
+        $thread =$selected?$selected->messages()->with('post.galleryFiles')->latest('id')->take(200)->get()->reverse()->values():collect();
 
-        return view($view,compact('role','conversations','selected','draft','peer','thread'));
+        // A buyer coming from an ad writes about it: the ad is shown above the message box and sent with the message.
+        $aboutAd =$role=='buyer' && $peer ? $this->sellerAd($peer->id,$r->ad) : null;
+
+        return view($view,compact('role','conversations','selected','draft','peer','thread','aboutAd'));
+    }
+
+    // A live ad of the seller, or null.
+    protected function sellerAd($sellerId, $adId){
+        if(!$adId || !is_numeric($adId)){
+            return null;
+        }
+        return Post::live()->where('addedby_id',$sellerId)->with('galleryFiles')->find((int) $adId);
     }
 
     protected function messagesSend(Request $r, $role){
@@ -83,6 +95,9 @@ trait HandlesMessages
 
         $message =new Message();
         $message->sender_id =$user->id;
+        if($role=='buyer' && ($ad =$this->sellerAd($conversation->seller_id,$r->ad))){
+            $message->post_id =$ad->id;
+        }
         $message->body =trim($r->body);
 
         $conversation->last_message_at =now();

@@ -51,7 +51,7 @@
         @if($role == 'buyer')
         <a href="{{$enquireUrl}}" class="btn-av-primary text-center"><i class="fa-solid fa-paper-plane me-2"></i>Enquire Now</a>
         @if($ad->addedby_id)
-        <a href="{{route('buyer.messages',['to'=>$ad->addedby_id])}}" class="btn-av-outline text-center"><i class="fa-regular fa-comments me-2"></i>Chat with Seller</a>
+        <a href="{{route('buyer.messages',['to'=>$ad->addedby_id,'ad'=>$ad->id])}}" class="btn-av-outline text-center"><i class="fa-regular fa-comments me-2"></i>Chat with Seller</a>
         @endif
         @elseif($isMine)
         <a href="{{route('seller.listingsAction',['edit',$ad->id])}}" class="btn-av-primary text-center"><i class="fa-solid fa-pen me-2"></i>Edit Your Ad</a>

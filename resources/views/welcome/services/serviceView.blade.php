@@ -221,7 +221,7 @@
                         <a href="{{route('login')}}" class="ad-action-btn primary"><i class="fa fa-comments-o"></i> Chat with seller</a>
                         <a href="{{route('login')}}" class="ad-action-btn"><i class="fa fa-heart-o"></i> Save</a>
                         @else
-                        <a href="{{auth()->user()->isBuyer() && $service->addedby_id ? route('buyer.messages',['to'=>$service->addedby_id]) : '#'}}" class="ad-action-btn primary {{auth()->user()->isBuyer() ? '' : 'full'}}"><i class="fa fa-comments-o"></i> Chat with seller</a>
+                        <a href="{{auth()->user()->isBuyer() && $service->addedby_id ? route('buyer.messages',['to'=>$service->addedby_id,'ad'=>$service->id]) : '#'}}" class="ad-action-btn primary {{auth()->user()->isBuyer() ? '' : 'full'}}"><i class="fa fa-comments-o"></i> Chat with seller</a>
                         @if(auth()->user()->isBuyer())
                         <form id="wishlistForm" action="{{route('buyer.wishlistToggle',$service->id)}}" method="POST" class="d-none">@csrf</form>
                         @php $saved = \App\Models\Wishlist::has(auth()->id(),$service->id); @endphp

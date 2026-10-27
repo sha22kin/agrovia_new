@@ -11,6 +11,7 @@ class Message extends Model
      * id              =bigint(20):None,
      * conversation_id =bigint(20):None,
      * sender_id       =bigint(20):None,
+     * post_id         =bigint(20):null the ad the message is about, shown quoted above it
      * body            =text:None,
      * read_at         =timestamp:null when the other side opened it
      * created_at      =timestamp:null
@@ -23,6 +24,10 @@ class Message extends Model
 
     public function sender(){
         return $this->belongsTo(User::class, 'sender_id');
+    }
+
+    public function post(){
+        return $this->belongsTo(Post::class);
     }
 
     // Messages sent to the user that were not opened yet.

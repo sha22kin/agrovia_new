@@ -49,6 +49,16 @@
       <div class="flex-grow-1 p-3 av-thread" id="msgThread">
         @forelse($thread as $message)
         <div class="av-thread-bubble {{$message->sender_id==$me?'me':'them'}}">
+          @if($message->post)
+          <a href="{{route('serviceView',$message->post->slug ?: 'no-title')}}" target="_blank" class="av-msg-ad">
+            <img src="{{asset($message->post->fiImage())}}" alt="{{$message->post->name}}">
+            <div class="overflow-hidden">
+              <small>About this ad</small>
+              <b>{{$message->post->name}}</b>
+              <span>৳{{number_format($message->post->price)}}</span>
+            </div>
+          </a>
+          @endif
           {!! nl2br(e($message->body)) !!}
           <div class="av-thread-time">{{$message->created_at?->format('M d, h:i A')}}</div>
         </div>
@@ -59,6 +69,20 @@
       <form method="POST" action="{{route($role.'.messageSend')}}" class="p-3 border-top">
         @csrf
         @if($selected)<input type="hidden" name="conversation" value="{{$selected->id}}">@else<input type="hidden" name="to" value="{{$peer->id}}">@endif
+        @if($aboutAd)
+        <input type="hidden" name="ad" value="{{$aboutAd->id}}">
+        <div class="av-msg-reply">
+          <a href="{{route('serviceView',$aboutAd->slug ?: 'no-title')}}" target="_blank" class="av-msg-ad">
+            <img src="{{asset($aboutAd->fiImage())}}" alt="{{$aboutAd->name}}">
+            <div class="overflow-hidden">
+              <small>Replying about this ad</small>
+              <b>{{$aboutAd->name}}</b>
+              <span>৳{{number_format($aboutAd->price)}}</span>
+            </div>
+          </a>
+          <a href="{{request()->fullUrlWithoutQuery('ad')}}" class="av-msg-reply-close" title="Don't attach this ad">&times;</a>
+        </div>
+        @endif
         <div class="d-flex gap-2">
           <input type="text" class="form-control @error('body') is-invalid @enderror" name="body" value="{{old('body')}}" maxlength="2000" placeholder="Type a message..." autocomplete="off" required>
           <button type="submit" class="btn-av-primary" title="Send"><i class="fa-solid fa-paper-plane"></i></button>
