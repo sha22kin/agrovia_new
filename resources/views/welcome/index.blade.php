@@ -219,53 +219,60 @@
         <h2>Open buyer requirements</h2>
         <p>Sellers can respond with a quote in minutes.</p>
       </div>
-      <a class="view-all" href="#">All RFQs →</a>
+      <a class="view-all" href="{{route('pageView','rfq')}}">All RFQs →</a>
     </div>
 
+    @php
+      // Sample requirements for the landing page; the RFQ page lists the real, approved ones.
+      $rfqs = [
+        ['title' => '10,000 kg Potato needed in Dhaka', 'buyer' => 'Metro Super Shop', 'loc' => 'Dhaka', 'posted' => '2 hours ago', 'qty' => '10,000 kg', 'budget' => '৳20 – ৳24/kg', 'delivery' => 'Within 7 days', 'quotes' => 12],
+        ['title' => 'Bulk Rui & Katla fish for restaurant chain', 'buyer' => 'Spice Garden Restaurants', 'loc' => 'Chattogram', 'posted' => '5 hours ago', 'qty' => '1,500 kg / month', 'budget' => '৳250 – ৳300/kg', 'delivery' => 'Recurring monthly', 'quotes' => 5],
+        ['title' => 'Organic compost for 20 acre farm', 'buyer' => 'Green Valley Agro', 'loc' => 'Rangpur', 'posted' => '1 day ago', 'qty' => '40 tons', 'budget' => 'Negotiable', 'delivery' => 'Within 15 days', 'quotes' => 8],
+        ['title' => 'Maize supply for feed mill', 'buyer' => 'Nutri Feed Industries', 'loc' => 'Gazipur', 'posted' => '2 days ago', 'qty' => '80,000 kg', 'budget' => '৳28 – ৳31/kg', 'delivery' => 'Within 30 days', 'quotes' => 17],
+      ];
+    @endphp
+
     <div class="row">
+      @foreach($rfqs as $rfq)
       <div class="rfq-card">
-        <h4>10,000 kg Potato needed in Dhaka</h4>
-        <div class="rfq-meta">Metro Super Shop · Dhaka · <span class="dim">Delivery within 7 days</span></div>
-        <div class="rfq-tags">
-          <span class="rfq-tag qty">10,000 kg</span>
-          <span class="rfq-tag">Budget ৳20 – ৳24/kg</span>
-          <span class="rfq-tag">12 quotes</span>
+        <div class="rfq-top">
+          <span class="rfq-status"><i></i> Open</span>
+          <span class="rfq-time">{{$rfq['posted']}}</span>
         </div>
-        <button class="btn-submit-quote">Submit quote</button>
-      </div>
 
-      <div class="rfq-card">
-        <h4>Bulk Rui &amp; Katla fish for restaurant chain</h4>
-        <div class="rfq-meta">Spice Garden Restaurants · Chattogram · <span class="dim">Recurring monthly</span></div>
-        <div class="rfq-tags">
-          <span class="rfq-tag qty">1,500 kg / month</span>
-          <span class="rfq-tag">Budget ৳250 – ৳300/kg</span>
-          <span class="rfq-tag">5 quotes</span>
+        <h4>{{$rfq['title']}}</h4>
+        <div class="rfq-meta">
+          <span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/></svg>
+            {{$rfq['buyer']}}
+          </span>
+          <span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+            {{$rfq['loc']}}
+          </span>
         </div>
-        <button class="btn-submit-quote">Submit quote</button>
-      </div>
 
-      <div class="rfq-card">
-        <h4>Organic compost for 20 acre farm</h4>
-        <div class="rfq-meta">Green Valley Agro · Rangpur · <span class="dim">Delivery within 15 days</span></div>
-        <div class="rfq-tags">
-          <span class="rfq-tag qty">40 tons</span>
-          <span class="rfq-tag">Budget Negotiable</span>
-          <span class="rfq-tag">8 quotes</span>
+        <div class="rfq-facts">
+          <div>
+            <div class="label">Quantity</div>
+            <div class="value qty">{{$rfq['qty']}}</div>
+          </div>
+          <div>
+            <div class="label">Budget</div>
+            <div class="value">{{$rfq['budget']}}</div>
+          </div>
+          <div>
+            <div class="label">Delivery</div>
+            <div class="value">{{$rfq['delivery']}}</div>
+          </div>
         </div>
-        <button class="btn-submit-quote">Submit quote</button>
-      </div>
 
-      <div class="rfq-card">
-        <h4>Maize supply for feed mill</h4>
-        <div class="rfq-meta">Nutri Feed Industries · Gazipur · <span class="dim">Delivery within 30 days</span></div>
-        <div class="rfq-tags">
-          <span class="rfq-tag qty">80,000 kg</span>
-          <span class="rfq-tag">Budget ৳28 – ৳31/kg</span>
-          <span class="rfq-tag">17 quotes</span>
+        <div class="rfq-footer">
+          <span class="rfq-quotes"><b>{{$rfq['quotes']}}</b> quotes received</span>
+          <a class="btn-submit-quote" href="{{route('pageView','rfq')}}">Submit quote →</a>
         </div>
-        <button class="btn-submit-quote">Submit quote</button>
       </div>
+      @endforeach
     </div>
   </div>
 </section>
