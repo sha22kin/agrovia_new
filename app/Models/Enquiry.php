@@ -151,6 +151,30 @@ class Enquiry extends Model
         return trim($number.' '.$this->unit);
     }
 
+    // Photo of the RFQ card: the category's own image, else a stock photo matched by category name.
+    public function coverImage(): string
+    {
+        if ($this->category && $this->category->imageFile) {
+            return $this->category->image();
+        }
+
+        $name = strtolower((string) $this->category?->name);
+        $photos = [
+            'livestock' => 'livestock', 'animal' => 'livestock', 'fish' => 'fish',
+            'equipment' => 'equipment', 'machin' => 'equipment',
+            'garden' => 'gardening', 'landscap' => 'gardening',
+            'nutrient' => 'compost', 'fertili' => 'compost', 'crop protection' => 'compost',
+            'produce' => 'potato', 'commodit' => 'maize',
+        ];
+        foreach ($photos as $word => $photo) {
+            if ($name !== '' && str_contains($name, $word)) {
+                return 'public/welcome/images/rfq/'.$photo.'.jpg';
+            }
+        }
+
+        return 'public/welcome/images/rfq/field.jpg';
+    }
+
     // [text, css class] shown on the right of an enquiry row.
     public function statusInfo(): array
     {

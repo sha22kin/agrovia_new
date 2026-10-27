@@ -375,7 +375,7 @@ class WelcomeController extends Controller
       //RFQ Page
       if($page->template=='RFQ'){
         // Only enquiries the admin approved and that still take quotes.
-        $rfqs =Enquiry::published()->with(['user:id,name','category:id,name'])->withCount('quotes')
+        $rfqs =Enquiry::published()->with(['user:id,name','category:id,name','category.imageFile'])->withCount('quotes')
           ->whereHas('user',fn ($q) => $q->notDeactivated())
           ->latest()->latest('id')->paginate(10);
         $rfqCategories =Attribute::where('type',0)->where('status','active')->whereNull('parent_id')->orderBy('name')->get(['id','name']);

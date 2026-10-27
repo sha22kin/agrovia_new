@@ -12,8 +12,10 @@
 .row {
     gap: 0;
 }
-.agv-rfq-card h5 { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; overflow-wrap:anywhere; }
-.agv-rfq-card .rfq-desc { font-size:13px; color:var(--muted); margin:0 0 14px; overflow-wrap:anywhere; }
+/* The cards share the home page RFQ card styles (newStyle.css); here the Bootstrap column sets the width. */
+.rfq-list .rfq-card { flex:none; max-width:none; height:100%; }
+.rfq-list .rfq-body h4 { overflow-wrap:anywhere; }
+.rfq-list .rfq-desc { font-size:13px; color:var(--muted); margin:8px 0 0; overflow-wrap:anywhere; }
 </style>
 @endpush @section('contents')
 
@@ -45,30 +47,40 @@
         <p style="font-size:13.5px; color:var(--muted); margin:0;">New buyer requests appear here after our team reviews them.</p>
       </div>
       @else
-      <div class="row g-3 mt-1">
+      <div class="row g-3 mt-1 rfq-list">
         @foreach($rfqs as $rfq)
         <div class="col-md-6">
-          <div class="agv-rfq-card h-100 d-flex flex-column">
-            <h5 title="{{ $rfq->title }}">{{ $rfq->title }}</h5>
-            <div class="loc"><i class="fa fa-user"></i> {{ $rfq->user?->name ?: 'Buyer' }} · {{ $rfq->category?->name ?: 'Any category' }}</div>
-            <div class="agv-rfq-grid">
-              <div><div class="lbl">Quantity</div><div class="val">{{ $rfq->quantityLabel() ?: '—' }}</div></div>
-              <div><div class="lbl">Quotes</div><div class="val">{{ $rfq->quotes_count }} received</div></div>
-              <div><div class="lbl">Posted</div><div class="val">{{ $rfq->created_at?->diffForHumans() }}</div></div>
-              <div><div class="lbl">Open until</div><div class="val">{{ $rfq->expires_at ? $rfq->expires_at->format('d M Y') : 'Until closed' }}</div></div>
+          <div class="rfq-card">
+            <div class="rfq-thumb">
+              <img src="{{ asset($rfq->coverImage()) }}" alt="{{ $rfq->category?->name ?: $rfq->title }}" loading="lazy">
+              <span class="rfq-status"><i></i> Open</span>
+              <span class="rfq-quotes">{{ $rfq->quotes_count }} {{ \Illuminate\Support\Str::plural('quote', $rfq->quotes_count) }}</span>
             </div>
-            @if($rfq->description)
-            <p class="rfq-desc">{{ \Illuminate\Support\Str::limit($rfq->description, 140) }}</p>
-            @endif
-            <div class="mt-auto">
+
+            <div class="rfq-body">
+              <h4 title="{{ $rfq->title }}">{{ $rfq->title }}</h4>
+              <div class="rfq-buyer">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+                {{ $rfq->user?->name ?: 'Buyer' }} · {{ $rfq->category?->name ?: 'Any category' }}
+              </div>
+              @if($rfq->description)
+              <p class="rfq-desc">{{ \Illuminate\Support\Str::limit($rfq->description, 110) }}</p>
+              @endif
+
+              <div class="rfq-facts">
+                <div><span>Quantity</span><b class="qty">{{ $rfq->quantityLabel() ?: '—' }}</b></div>
+                <div><span>Posted</span><b>{{ $rfq->created_at?->diffForHumans() }}</b></div>
+                <div><span>Open until</span><b>{{ $rfq->expires_at ? $rfq->expires_at->format('d M Y') : 'Until closed' }}</b></div>
+              </div>
+
               @if($canQuote && $rfq->user_id != $viewer->id)
-              <a href="{{ route('seller.enquiriesAction', ['view', $rfq->id]) }}" class="btn-agv-solid block">Submit a quote</a>
+              <a href="{{ route('seller.enquiriesAction', ['view', $rfq->id]) }}" class="btn-submit-quote">Submit a quote</a>
               @elseif($viewer && $rfq->user_id == $viewer->id)
-              <span class="btn-agv-solid block" style="opacity:.6; pointer-events:none;">Your requirement</span>
+              <span class="btn-submit-quote" style="opacity:.6; pointer-events:none;">Your requirement</span>
               @elseif($viewer)
-              <a href="{{ route('seller.enquiriesAction', ['view', $rfq->id]) }}" class="btn-agv-solid block" title="A seller account is needed to send quotes">Submit a quote</a>
+              <a href="{{ route('seller.enquiriesAction', ['view', $rfq->id]) }}" class="btn-submit-quote" title="A seller account is needed to send quotes">Submit a quote</a>
               @else
-              <a href="{{ route('login') }}" class="btn-agv-solid block">Log in to quote</a>
+              <a href="{{ route('login') }}" class="btn-submit-quote">Log in to quote</a>
               @endif
             </div>
           </div>
