@@ -1,4 +1,4 @@
-{{-- Messages of the open chat with the pinned ones on top. Needs $thread and $me (the viewer's id). --}}
+{{-- Messages of the open chat with the pinned ones on top and a label for every day. Needs $thread and $me (the viewer's id). --}}
 @php $pinned = $thread->filter(fn ($m) => $m->pinned_at && !$m->isDeleted())->sortByDesc('pinned_at'); @endphp
 @if($pinned->isNotEmpty())
 <div class="av-msg-pinned">
@@ -10,8 +10,14 @@
 </div>
 @endif
 
+@php $day = null; @endphp
 @forelse($thread as $message)
-@include('dashboard.partials.message-bubble')
+  @php $msgDay = $message->created_at?->toDateString(); @endphp
+  @if($msgDay !== $day)
+    @php $day = $msgDay; @endphp
+    <div class="av-msg-day"><span>{{$message->created_at?->isToday() ? 'Today' : ($message->created_at?->isYesterday() ? 'Yesterday' : $message->created_at?->format('d M Y'))}}</span></div>
+  @endif
+  @include('dashboard.partials.message-bubble')
 @empty
-<div class="av-empty" id="msgEmpty"><i class="fa-regular fa-message"></i>No messages yet. Say hello!</div>
+<div class="av-empty h-100" id="msgEmpty"><i class="fa-regular fa-hand"></i>No messages yet. Say hello!</div>
 @endforelse

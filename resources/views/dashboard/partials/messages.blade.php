@@ -1,78 +1,87 @@
-{{-- Inbox and chat shared by the buyer and seller themes. Needs $role, $conversations, $selected, $draft, $peer, $thread. --}}
+{{-- Inbox and chat shared by the buyer, seller and expert themes. Needs $role, $conversations, $selected, $draft, $peer, $thread, $version, $aboutAd. --}}
 @php
   $me = Auth::id();
   $peerKey = $role == 'buyer' ? 'seller' : 'buyer';
+  // On phones only one pane shows: the chat when one was opened, otherwise the list.
+  $chatOpen = $peer && (request()->filled('c') || $draft);
 @endphp
-<h5 class="fw-bold mb-3">Messages</h5>
-<div class="av-card mt-0 p-2 p-md-3">
-  <div class="row g-0">
-    <div class="col-12 col-md-4 border-end" style="max-height:520px;overflow-y:auto;">
-      <div class="p-2">
-        <input type="text" id="msgSearch" class="form-control mb-2" placeholder="Search messages...">
+@push('css')
+<link rel="stylesheet" href="{{asset('public/dashboard/css/chat.css')}}?v={{@filemtime(public_path('dashboard/css/chat.css'))}}">
+@endpush
 
-        <div id="msgList">
-          @include('dashboard.partials.message-list')
-        </div>
+<h5 class="fw-bold mb-3">Messages</h5>
+<div class="av-chat {{$chatOpen ? 'chat-open' : ''}}">
+  <aside class="av-chat-side">
+    <div class="av-chat-side-head">
+      <h6>Chats</h6>
+      <div class="av-chat-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="msgSearch" placeholder="Search name or message" autocomplete="off">
+      </div>
+    </div>
+    <div class="av-chat-list" id="msgList">
+      @include('dashboard.partials.message-list')
+    </div>
+  </aside>
+
+  <section class="av-chat-main">
+    @if($peer)
+    <div class="av-chat-head">
+      <a href="{{route($role.'.messages')}}" class="av-chat-back" title="All chats"><i class="fa-solid fa-arrow-left"></i></a>
+      <img src="{{$peer->avatar(80)}}" alt="{{$peer->name}}">
+      <div class="overflow-hidden">
+        <div class="name text-truncate">{{$peer->name}}</div>
+        {{-- An expert sees just the name of the farmer; a buyer / seller sees what the other one is. --}}
+        @if($role != 'expert')
+        <div class="sub text-truncate"><span class="role">{{$peer->isExpert() ? 'Expert' : ucfirst($peerKey)}}</span>@if($peer->isExpert() && $peer->expertProfile?->headline){{$peer->expertProfile->headline}}@elseif($peer->company_name){{$peer->company_name}}@endif</div>
+        @endif
       </div>
     </div>
 
-    <div class="col-12 col-md-8 d-flex flex-column" style="min-height:420px;">
-      @if($peer)
-      <div class="d-flex align-items-center gap-2 p-3 border-bottom">
-        <img src="{{$peer->avatar(80)}}" alt="{{$peer->name}}" style="width:38px;height:38px;border-radius:50%;object-fit:cover;">
-        <div>
-          <div class="fw-semibold" style="font-size:.87rem;">{{$peer->name}}</div>
-          {{-- An expert sees just the name of the farmer; a buyer / seller sees what the other one is. --}}
-          @if($role != 'expert')
-          <div class="text-muted" style="font-size:.72rem;">{{$peer->isExpert() ? 'Expert' : ucfirst($peerKey)}}@if($peer->isExpert() && $peer->expertProfile?->headline) · {{$peer->expertProfile->headline}}@elseif($peer->company_name) · {{$peer->company_name}}@endif</div>
-          @endif
-        </div>
-      </div>
-      <div class="flex-grow-1 p-3 av-thread" id="msgThread" data-v="{{$version}}" data-action-url="{{route($role.'.messageAction')}}">
-        @if($selected)
-        @include('dashboard.partials.message-thread', ['me' => $me])
-        @else
-        <div class="av-empty" id="msgEmpty"><i class="fa-regular fa-message"></i>Say hello to {{$peer->name}}.</div>
-        @endif
-      </div>
-      <form method="POST" action="{{route($role.'.messageSend')}}" class="p-3 border-top" id="msgForm">
-        @csrf
-        @if($selected)<input type="hidden" name="conversation" value="{{$selected->id}}">@else<input type="hidden" name="to" value="{{$peer->id}}">@endif
-        @if($aboutAd)
-        <div class="av-msg-reply" id="msgReply">
-          <input type="hidden" name="ad" value="{{$aboutAd->id}}">
-          <a href="{{route('serviceView',$aboutAd->slug ?: 'no-title')}}" target="_blank" class="av-msg-ad">
-            <img src="{{asset($aboutAd->fiImage())}}" alt="{{$aboutAd->name}}">
-            <div class="overflow-hidden">
-              <small>Replying about this ad</small>
-              <b>{{$aboutAd->name}}</b>
-              <span>৳{{number_format($aboutAd->price)}}</span>
-            </div>
-          </a>
-          <a href="{{request()->fullUrlWithoutQuery('ad')}}" class="av-msg-reply-close" title="Don't attach this ad">&times;</a>
-        </div>
-        @endif
-        <div class="av-msg-reply d-none" id="msgReplyTo">
-          <input type="hidden" name="reply_to" value="">
-          <div class="av-msg-quote flex-grow-1 m-0">
-            <small>Replying to <span data-who></span></small>
-            <span data-text></span>
-          </div>
-          <a href="#" class="av-msg-reply-close" title="Cancel reply">&times;</a>
-        </div>
-        <div class="d-flex gap-2">
-          <input type="text" class="form-control @error('body') is-invalid @enderror" name="body" value="{{old('body')}}" maxlength="2000" placeholder="Type a message..." autocomplete="off" required>
-          <button type="submit" class="btn-av-primary" title="Send"><i class="fa-solid fa-paper-plane"></i></button>
-        </div>
-        <div class="invalid-feedback d-block" id="msgError">@error('body'){{$message}}@enderror</div>
-      </form>
+    <div class="av-thread" id="msgThread" data-v="{{$version}}" data-action-url="{{route($role.'.messageAction')}}">
+      @if($selected)
+      @include('dashboard.partials.message-thread', ['me' => $me])
       @else
-      <div class="av-empty my-auto"><i class="fa-regular fa-comments"></i>Select a conversation to read it.</div>
+      <div class="av-empty h-100" id="msgEmpty"><i class="fa-regular fa-hand"></i>Say hello to {{$peer->name}}.</div>
       @endif
     </div>
-  </div>
-</div>
 
+    <form method="POST" action="{{route($role.'.messageSend')}}" class="av-chat-compose" id="msgForm">
+      @csrf
+      @if($selected)<input type="hidden" name="conversation" value="{{$selected->id}}">@else<input type="hidden" name="to" value="{{$peer->id}}">@endif
+      @if($aboutAd)
+      <div class="av-msg-reply" id="msgReply">
+        <input type="hidden" name="ad" value="{{$aboutAd->id}}">
+        <a href="{{route('serviceView',$aboutAd->slug ?: 'no-title')}}" target="_blank" class="av-msg-ad">
+          <img src="{{asset($aboutAd->fiImage())}}" alt="{{$aboutAd->name}}">
+          <div class="overflow-hidden">
+            <small>Replying about this ad</small>
+            <b>{{$aboutAd->name}}</b>
+            <span>৳{{number_format($aboutAd->price)}}</span>
+          </div>
+        </a>
+        <a href="{{request()->fullUrlWithoutQuery('ad')}}" class="av-msg-reply-close" title="Don't attach this ad">&times;</a>
+      </div>
+      @endif
+      <div class="av-msg-reply d-none" id="msgReplyTo">
+        <input type="hidden" name="reply_to" value="">
+        <div class="av-msg-quote">
+          <small>Replying to <b data-who></b></small>
+          <span data-text></span>
+        </div>
+        <a href="#" class="av-msg-reply-close" title="Cancel reply">&times;</a>
+      </div>
+      <div class="av-chat-input">
+        <input type="text" class="@error('body') is-invalid @enderror" name="body" value="{{old('body')}}" maxlength="2000" placeholder="Write a message..." autocomplete="off" required>
+        <button type="submit" class="av-chat-send" title="Send"><i class="fa-solid fa-paper-plane"></i></button>
+      </div>
+      <div class="invalid-feedback d-block" id="msgError">@error('body'){{$message}}@enderror</div>
+    </form>
+    @else
+    <div class="av-empty"><i class="fa-regular fa-comments"></i>Select a chat to start messaging.</div>
+    @endif
+  </section>
+</div>
 @push('js')
 <script>
   (function () {
@@ -155,7 +164,16 @@
         }
 
         var action = e.target.closest('[data-action]');
-        if (!action) { return; }
+        if (!action) {
+          // Touch screens have no hover: tapping a message shows its buttons (and hides the others).
+          var tapped = e.target.closest('.av-thread-bubble');
+          if (tapped && !e.target.closest('a')) {
+            var tappedRow = tapped.closest('.av-msg-row');
+            thread.querySelectorAll('.av-msg-row.show-actions').forEach(function (r) { if (r !== tappedRow) { r.classList.remove('show-actions'); } });
+            tappedRow.classList.toggle('show-actions');
+          }
+          return;
+        }
         if (action.dataset.action === 'delete_all' && !confirm('Delete this message for everyone?')) { return; }
         var row = action.closest('.av-msg-row');
         var body = new FormData();

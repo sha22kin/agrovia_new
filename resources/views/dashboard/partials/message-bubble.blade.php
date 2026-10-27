@@ -3,7 +3,7 @@
   $mineMsg = $message->sender_id == $me;
   $likeCount = $message->likes->count();
 @endphp
-<div class="av-msg-row {{$mineMsg?'me':'them'}}" id="msg-{{$message->id}}" data-id="{{$message->id}}">
+<div class="av-msg-row {{$mineMsg?'me':'them'}} {{$likeCount?'has-likes':''}}" id="msg-{{$message->id}}" data-id="{{$message->id}}">
   <div class="av-thread-bubble {{$mineMsg?'me':'them'}} {{$message->isDeleted()?'deleted':''}}">
     @if($message->isDeleted())
       <i class="fa-solid fa-ban me-1"></i>{{$mineMsg ? 'You deleted this message' : 'This message was deleted'}}
@@ -31,11 +31,12 @@
       <div class="av-msg-text">{!! nl2br(e($message->body)) !!}</div>
     @endif
 
-    <div class="av-thread-time">
-      {{$message->created_at?->format('M d, h:i A')}}
+    {{-- The day is shown above the messages, so only the time is needed here. --}}
+    <div class="av-msg-meta">
+      <span title="{{$message->created_at?->format('d M Y, h:i A')}}">{{$message->created_at?->format('h:i A')}}</span>
       @if($mineMsg && !$message->isDeleted())
         @if($message->read_at)
-        <span class="av-msg-status seen" title="Seen {{$message->read_at->format('M d, h:i A')}}"><i class="fa-solid fa-check-double"></i> Seen</span>
+        <span class="av-msg-status seen" title="Seen {{$message->read_at->format('d M, h:i A')}}"><i class="fa-solid fa-check-double"></i> Seen</span>
         @else
         <span class="av-msg-status" title="Sent"><i class="fa-solid fa-check"></i> Sent</span>
         @endif
