@@ -78,10 +78,15 @@ trait HandlesMessages
     }
 
     // Changes whenever something in the thread changes for the user: a new, read, liked, pinned or deleted message.
+    // Built from the state itself, not from updated_at, which has whole seconds: two changes in one second
+    // (a like, then a pin) would otherwise look like one and the second never reach the other side.
     protected function threadVersion($conversation, $me){
-        $state =$conversation->messages()->visibleTo($me)
-            ->selectRaw('count(*) as total, coalesce(sum(id),0) as ids, max(updated_at) as changed')->first();
-        return md5($state->total.'|'.$state->ids.'|'.$state->changed);
+        $messages =$conversation->messages()->visibleTo($me)->latest('id')->take(200)
+            ->get(['id','read_at','pinned_at','deleted_at'])
+            ->map(fn ($m) => [$m->id,(bool) $m->read_at,(string) $m->pinned_at,(bool) $m->deleted_at]);
+        $likes =MessageLike::whereIn('message_id',$messages->pluck(0))->orderBy('id')->get(['message_id','user_id'])
+            ->map(fn ($l) => $l->message_id.':'.$l->user_id);
+        return md5(json_encode([$messages,$likes]));
     }
 
     protected function threadHtml($conversation, $me){
