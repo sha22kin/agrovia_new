@@ -135,48 +135,43 @@
     <div class="row">
       @foreach($farmers as $farmer)
       <div class="farmer-card">
-        <div class="farmer-head">
-          <div class="farmer-avatar">
-            @if($farmer['photo'])
-              <img src="{{asset($farmer['photo'])}}" alt="{{$farmer['name']}}" loading="lazy">
-            @else
-              <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="24" r="12"/><path d="M8 60c0-13.3 10.7-22 24-22s24 8.7 24 22z"/></svg>
-            @endif
-            <span class="farmer-avatar-check" title="Verified farmer">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
-            </span>
+        <div class="farmer-cover"></div>
+        <div class="farmer-avatar">
+          @if($farmer['photo'])
+            <img src="{{asset($farmer['photo'])}}" alt="{{$farmer['name']}}" loading="lazy">
+          @else
+            <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="25" r="11"/><path d="M10 58c0-12 9.8-20 22-20s22 8 22 20z"/></svg>
+          @endif
+        </div>
+
+        <div class="farmer-body">
+          <h4>{{$farmer['name']}}</h4>
+          <div class="farmer-loc">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+            {{$farmer['loc']}}
           </div>
-          <div class="farmer-name">
-            <h4>{{$farmer['name']}}</h4>
-            <div class="loc">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
-              {{$farmer['loc']}}
+          <span class="farmer-verified">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+            Verified farmer
+          </span>
+
+          <div class="farmer-stats">
+            <div>
+              <div class="value">{{$farmer['type']}}</div>
+              <div class="label">Type</div>
+            </div>
+            <div>
+              <div class="value">{{$farmer['size']}}</div>
+              <div class="label">Farm size</div>
             </div>
           </div>
-        </div>
 
-        <div class="farmer-info">
-          <div>
-            <div class="label">Type</div>
-            <div class="value">{{$farmer['type']}}</div>
-          </div>
-          <div>
-            <div class="label">Farm size</div>
-            <div class="value">{{$farmer['size']}}</div>
-          </div>
-        </div>
-
-        <div class="farmer-products">
-          <div class="label">Products</div>
           <div class="farmer-chips">
             @foreach($farmer['products'] as $product)
               <span>{{$product}}</span>
             @endforeach
           </div>
-        </div>
 
-        <div class="farmer-footer">
-          <span class="verified-badge">✓ Verified farmer</span>
           <button class="btn-profile">View profile</button>
         </div>
       </div>
